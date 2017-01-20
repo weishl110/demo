@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="circleloader">
+        <attr name="text" format="string" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textFakeBold" format="boolean" />
+        <attr name="textColor" format="reference|color" />
+        <attr name="circleRadius" format="dimension" />
+        <attr name="circleStrokeWidth" format="dimension" />
+        <attr name="circleColor" format="reference|color" />
+        <attr name="circleAndTextSpacing" format="dimension" />
+        <attr name="backgroundColor" format="reference|color" />
+    </declare-styleable>
+
+    <!-- 下拉刷新头部的位置 -->
+    <declare-styleable name="refreshView" >
+        <attr name="refresh_gravity" format="enum">
+            <enum name="refresh_top" value="1" />
+            <enum name="refresh_center" value="2" />
+            <enum name="refresh_bottom" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>
