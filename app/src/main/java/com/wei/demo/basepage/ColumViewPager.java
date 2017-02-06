@@ -31,7 +31,6 @@ public class ColumViewPager extends BasePager {
     private static final String TAG = "zpy_ColumViewPager";
 
     private ChartView chartview;
-    private TextView tv;
     private TextView btn_get;
 
     public ColumViewPager(Context context) {
@@ -43,7 +42,6 @@ public class ColumViewPager extends BasePager {
         View view = View.inflate(weak.get(), R.layout.layout_columview, null);
         btn_get = (TextView) view.findViewById(R.id.get);
         chartview = (ChartView) view.findViewById(R.id.chartview);
-        tv = (TextView) view.findViewById(R.id.tv);
         btn_get.setOnClickListener(this);
         return view;
     }
@@ -101,7 +99,6 @@ public class ColumViewPager extends BasePager {
                 String text = "10432.42%";
                 SpannableString spannableString = setTextColorAndSize(text, Color.RED, 10, text.indexOf("%"), text.length(), true);
                 Log.e(TAG, "initData: spannable = " + spannableString);
-                tv.setText(spannableString);
                 DisplayMetrics metrics = weak.get().getResources().getDisplayMetrics();
                 float density = metrics.density;
                 int densityDpi = metrics.densityDpi;

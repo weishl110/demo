@@ -163,14 +163,9 @@ public class TimeSharingView extends View {
         if (isSet) {
             drawLeftText(canvas);//绘制左侧净值
             drawBottomText(canvas);//绘制底部时间
-            drawLine(canvas);
-            drawLong(canvas);
+            drawLine(canvas);//绘制分时曲线
+            drawLong(canvas);//长按绘制
         }
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        return super.dispatchTouchEvent(event);
     }
 
     /**
