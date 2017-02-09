@@ -43,6 +43,9 @@ public class ColumViewPager extends BasePager {
         btn_get = (TextView) view.findViewById(R.id.get);
         chartview = (ChartView) view.findViewById(R.id.chartview);
         btn_get.setOnClickListener(this);
+//        btn_get.setOnClickListener(View -> {
+//            initData();
+//        });
         return view;
     }
 
@@ -107,7 +110,7 @@ public class ColumViewPager extends BasePager {
                 int widthPixels = displayMetrics.widthPixels;
                 int heightPixels = displayMetrics.heightPixels;
                 int width = btn_get.getWidth();
-                Log.e(TAG, "onClick:  px2dp = "+px2dp(width));
+                Log.e(TAG, "onClick:  px2dp = " + px2dp(width));
                 double screenSize = getScreenSizeOfDevice();
                 double v1 = Math.sqrt(widthPixels * widthPixels + heightPixels * heightPixels) / screenSize;
                 Log.e(TAG, "onClick: sprt = " + v1);
@@ -127,20 +130,20 @@ public class ColumViewPager extends BasePager {
         float density = weak.get().getResources().getDisplayMetrics().density;
         return pxValue / density + 0.5f;
     }
+
     private double getScreenSizeOfDevice() {
         DisplayMetrics dm = weak.get().getResources().getDisplayMetrics();
-        int width=dm.widthPixels;
-        int height=dm.heightPixels;
-        double x = Math.pow(width,2);
-        double y = Math.pow(height,2);
-        double diagonal = Math.sqrt(x+y);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        double x = Math.pow(width, 2);
+        double y = Math.pow(height, 2);
+        double diagonal = Math.sqrt(x + y);
 
-        int dens=dm.densityDpi;
-        double screenInches = diagonal/(double)dens;
-        Log.d(TAG,"The screenInches "+screenInches);
+        int dens = dm.densityDpi;
+        double screenInches = diagonal / (double) dens;
+        Log.d(TAG, "The screenInches " + screenInches);
         return screenInches;
     }
-
 
 
     //创建假数据

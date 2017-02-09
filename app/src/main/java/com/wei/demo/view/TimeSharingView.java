@@ -39,7 +39,7 @@ public class TimeSharingView extends View {
     //线的颜色
     private final String COLOR_BLUE = "#429ae6";
     //背景渐变色
-    private final String COLOR_BLUE_ALPHA = "#11429ae6";
+    private final String COLOR_BLUE_ALPHA = "#33429ae6";
     //底部背景日期颜色
     private final String COLOR_BOTTOMDATEBG = "#88E2EBF9";
     //底部日期颜色

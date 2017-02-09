@@ -48,7 +48,7 @@ public class ChartView extends SurfaceView {
     private final int MARGIN = 24;
     private final int MARGINTOP = 48;
     private final int MARGINBOTTOM = 48;
-    private final int VERTICALSPEC = 10;//柱状图间距
+    private int VERTICALSPEC = 4;//柱状图间距
     private int mHeight;
     private int mWidth;
     private int avarageLine;
@@ -110,6 +110,7 @@ public class ChartView extends SurfaceView {
         gestureDetector = new GestureDetector(context, new MyGustrueListener());
 
         textsize = dp2px(textsize);
+        VERTICALSPEC = dp2px(VERTICALSPEC);
     }
 
     @Override

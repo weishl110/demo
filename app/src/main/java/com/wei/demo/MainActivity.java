@@ -1,6 +1,7 @@
 package com.wei.demo;
 
 import android.os.Bundle;
+import android.os.MemoryFile;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         tablayout.setupWithViewPager(viewpager);
         initTab();
 
-
         //左侧菜单
         ListView left_listview = (ListView) findViewById(R.id.left_listview);
         left_listview.setAdapter(new MyListAdapter());
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 pagerList.get(position).initData();
             }
         });
-
     }
 
     private void initTab() {
