@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.wei.demo.ColumnBean;
 import com.wei.demo.ColumnLocation;
+import com.wei.demo.bean.PointF;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -36,6 +37,7 @@ public class ChartView extends SurfaceView {
     private static final String TAG = "zpy_ChartView";
 
     private ArrayList<ColumnBean> list = new ArrayList<>();
+    private ArrayList<PointF> pointFs = new ArrayList<>();//存放每个柱的左右侧位置
     private Context context;
 
     //默认线的颜色
@@ -255,7 +257,6 @@ public class ChartView extends SurfaceView {
         ColumnBean columnBean = list.get(0);
         String date_value = columnBean.getDate();
         dateIndex = Integer.valueOf(date_value.substring(date_value.lastIndexOf("-") + 1)) - 1;
-
         for (int i = 0; i < list.size(); i++) {
 
             ColumnBean columnBean2 = list.get(i);
@@ -278,26 +279,12 @@ public class ChartView extends SurfaceView {
             int startX = ((int) (index2 * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) /*+ orange*/);
             int endX = (int) (startX + mColumnWidth);
             int left = MARGIN + STOREWIDTH;
+            //存放左侧和右侧的点
+            PointF pointF = new PointF();
+            pointF.x = startX;
+            pointF.endX = endX;
+            pointFs.add(pointF);
 
-//            if (i == 0 && startX >= left) {
-//                isMoveLeft = true;
-//                isMoveRight = false;
-//            }
-//
-//            if (i == list.size() - 1 && endX <= MARGIN + STOREWIDTH + mWidth) {
-//                isMoveRight = true;
-//                isMoveLeft = false;
-//            }
-//
-//            if (startX < left && endX > left) {
-//                startX = left;
-//            }
-//            int right = left + mWidth;
-//            if (endY > right && startX < right) {
-//                endX = right;
-//            }
-//            Log.e(TAG, "drawColumnBitmap: endx = " + endX + "   startX = " + startX + "  i = " + i + "   ismoveleft = " + isMoveLeft);
-//            if (startX >= left && endX <= right) {
             Rect rect = new Rect();
             rect.left = startX;
             rect.top = value < 0 ? centerLine : (int) endY;
@@ -315,7 +302,9 @@ public class ChartView extends SurfaceView {
             String endDate = list.get(list.size() - 1).getDate();
             float textWidth = paint.measureText(startDate);
             int startX = (int) ((dateIndex * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) - textWidth / 2);
-            int endStartX = (int) ((dateIndex + list.size() - 1) * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH - textWidth / 2);
+            String tempDate = list.get(list.size() - 1).getDate();
+            int tempIndex = Integer.parseInt(tempDate.substring(tempDate.lastIndexOf("-") + 1));
+            int endStartX = (int) (tempIndex * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH - textWidth / 2);
 
             if (startX < MARGIN + STOREWIDTH) {
                 startX = MARGIN + STOREWIDTH;
@@ -323,6 +312,8 @@ public class ChartView extends SurfaceView {
             if (endStartX + textWidth > MARGIN + STOREWIDTH + mWidth) {
                 endStartX = (int) (MARGIN + mWidth - textWidth);
             }
+
+            Log.e(TAG, "drawLine: startX = " + startX + "  endX = "+endStartX);
             canvas.drawText(startDate, startX, MARGINTOP + mHeight +textsize, paint);
             canvas.drawText(endDate, endStartX, MARGINTOP + mHeight + textsize, paint);
 

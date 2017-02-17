@@ -14,6 +14,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_bright"
+            android:padding="5dp"
+            android:text="textview"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
         <com.wei.demo.view.MyViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"

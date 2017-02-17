@@ -1,16 +1,21 @@
 package com.wei.demo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.MemoryFile;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.wei.demo.adapter.MyListAdapter;
 import com.wei.demo.adapter.MyViewPagerAdapter;
@@ -43,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
+        TextView tv = (TextView) findViewById(R.id.tv);
+        tv.setOnClickListener(View ->{
+            startActivity(new Intent(this,SencondActivity.class));
+        });
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewpager = (MyViewPager) findViewById(R.id.viewpager);
         tablayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -103,4 +114,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private static final String TAG = "zpy_MainActivity";
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e(TAG, "onSaveInstanceState: " + (outState == null));
+        Log.e(TAG, "onSaveInstanceState: " + outState.toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.e(TAG, "onRestoreInstanceState: " + (savedInstanceState == null));
+        if(savedInstanceState != null){
+            Log.e(TAG, "onRestoreInstanceState: " + savedInstanceState.toString());
+        }
+    }
 }

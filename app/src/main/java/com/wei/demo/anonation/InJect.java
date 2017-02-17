@@ -8,8 +8,6 @@ import android.app.Activity;
 
 public class InJect {
 
-    private Activity contentView;
-
     public static void inject(Activity activity) {
         setContentView(activity);
     }
@@ -17,7 +15,9 @@ public class InJect {
     public static void setContentView(Activity activity) {
         Class<? extends Activity> clazz = activity.getClass();
         ContentView annotation = clazz.getAnnotation(ContentView.class);
-        int value = annotation.value();
-        activity.setContentView(value);
+        if (annotation != null) {
+            int value = annotation.value();
+            activity.setContentView(value);
+        }
     }
 }

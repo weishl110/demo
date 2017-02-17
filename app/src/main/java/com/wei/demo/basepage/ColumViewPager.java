@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.wei.demo.view.ChartView;
 import com.wei.demo.ColumnBean;
 import com.wei.demo.R;
+import com.wei.demo.view.bitmap.ColumnView;
 
 import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
@@ -32,6 +33,7 @@ public class ColumViewPager extends BasePager {
 
     private ChartView chartview;
     private TextView btn_get;
+    private ColumnView columnView;
 
     public ColumViewPager(Context context) {
         super(context);
@@ -42,10 +44,11 @@ public class ColumViewPager extends BasePager {
         View view = View.inflate(weak.get(), R.layout.layout_columview, null);
         btn_get = (TextView) view.findViewById(R.id.get);
         chartview = (ChartView) view.findViewById(R.id.chartview);
+        columnView = (ColumnView) view.findViewById(R.id.columview);
         btn_get.setOnClickListener(this);
-//        btn_get.setOnClickListener(View -> {
-//            initData();
-//        });
+        btn_get.setOnClickListener(View -> {
+            initData();
+        });
         return view;
     }
 
@@ -89,7 +92,7 @@ public class ColumViewPager extends BasePager {
     @Override
     public void initData() {
         ArrayList<ColumnBean> list = getData();
-        chartview.setData(list);
+        columnView.setData(list);
 
     }
 
@@ -98,6 +101,7 @@ public class ColumViewPager extends BasePager {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.get:
+                columnView.setData(getData());
                 chartview.setData(getData());
                 String text = "10432.42%";
                 SpannableString spannableString = setTextColorAndSize(text, Color.RED, 10, text.indexOf("%"), text.length(), true);
@@ -149,15 +153,16 @@ public class ColumViewPager extends BasePager {
     //创建假数据
     public ArrayList<ColumnBean> getData() {
         ArrayList<ColumnBean> list = new ArrayList<ColumnBean>();
-        for (int i = 0; i < 31; i++) {
+        int tempIndex = 10;
+        for (int i = 0; i < 30; i++) {
             ColumnBean columnBean = new ColumnBean();
             double value = (10000 - ((Math.random() * 20000)));
             value = getDecimal(value);
             columnBean.setValue(value);
-            if (i + 1 < 10) {
-                columnBean.setDate("2016-11-0" + (i + 1));
+            if (tempIndex + 1 < 10) {
+                columnBean.setDate("2016-11-0" + (tempIndex +=1));
             } else {
-                columnBean.setDate("2016-11-" + (i + 1));
+                columnBean.setDate("2016-11-" + (tempIndex += 1));
             }
             list.add(columnBean);
         }

@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/ll"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="newspager"
-        android:textColor="@android:color/black"
+        android:visibility="gone"
+        android:background="@drawable/bg"
+        android:textColor="@drawable/tv_bg"
+        android:textSize="35sp" />
+    <TextView
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="newspager"
+        android:background="@drawable/bg"
+        android:textColor="@drawable/tv_bg"
         android:textSize="35sp" />
 
-    <com.wei.demo.view.MySurfaceView
+    <com.wei.demo.view.TestView
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:id="@+id/mysu"
-        android:background="@android:color/holo_orange_dark"/>
+        android:visibility="gone"
+        android:background="@android:color/holo_blue_bright"/>
+
+    <com.wei.demo.view.bitmap.ColumnView
+        android:id="@+id/columview"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
 
 </LinearLayout>
