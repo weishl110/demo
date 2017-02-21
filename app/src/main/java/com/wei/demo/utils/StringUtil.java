@@ -1,10 +1,10 @@
 package com.wei.demo.utils;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.wei.demo.ColumnBean;
+import com.wei.demo.bean.ColumnBean;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -44,16 +44,27 @@ public class StringUtil {
             return -1;
         }
         int size = list.size();
-        double indexValue = Math.abs(list.get(0).getNetValue() - midValue);
+        float indexValue = (float) Math.abs(list.get(0).getNetValue() - midValue);
         int index = 0;
 
         for (int i = 1; i < size; i++) {
-            double tempValue = Math.abs(list.get(i).getNetValue() - midValue);
+            float tempValue = (float) Math.abs(list.get(i).getNetValue() - midValue);
             if (tempValue > indexValue) {
                 indexValue = tempValue;
                 index = i;
             }
         }
         return index;
+    }
+
+
+    /**
+     * 保留两位小数
+     * @param value
+     * @return
+     */
+    public  static float getDecimal(double value) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        return Float.parseFloat(decimalFormat.format(value));
     }
 }

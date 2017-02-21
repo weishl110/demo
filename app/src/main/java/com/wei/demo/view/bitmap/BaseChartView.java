@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +16,9 @@ import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by ${wei} on 2017/2/16.
@@ -24,6 +26,7 @@ import java.text.DecimalFormat;
 
 public abstract class BaseChartView extends View {
 
+    protected static final String TAG = "zpy_BaseChartView";
     protected Context context;
     protected int mWidth, mHeight, downX;
     //纵向平均值
@@ -32,23 +35,26 @@ public abstract class BaseChartView extends View {
     protected final int STOREWIDTH = 3;
     //左右上下边距
     protected int MARGIN = 11;
-    protected int MARGINTOP = 16;
+    protected int marginTop = 16;
     protected int MARGINBOTTOM = 16;
     protected int VERTICALSPEC = 2;//柱状图间距
 
     //底部背景日期颜色
     protected final String COLOR_BOTTOMDATEBG = "#88E2EBF9";
     //底部日期颜色
-    protected final String COLOR_BOTTOMDATE = "#66666666";
+    protected final String COLOR_BOTTOMDATE = "#666666";
+    //左侧文字颜色
+    protected final String COLOR_LEFTTEXT = "#999999";
     //虚线的颜色
     protected final String COLOR_DASHLINE = "#999999";
     //边框的颜色
     protected final String COLOR_BOX = "#999999";
     //虚线的颜色
     protected final String COLOR_DOTTED = "#333333";
-    protected int textsize = 14;
+    protected int textsize = 12;
+    protected int dateTextSize = 14;
 
-    protected boolean isSet = false, isLongPress = false, isCanvas = false;
+    protected boolean isSet = false, isLongPress = false;
     protected int mTouchSlop;//系统默认为滑动距离
     protected GestureDetector mGestureDetector;
     protected float longDownX;
@@ -78,12 +84,13 @@ public abstract class BaseChartView extends View {
         mGestureDetector = new GestureDetector(context, new MyGustrueListener());
 
         textsize = dp2px(textsize);
+        dateTextSize = dp2px(dateTextSize);
         VERTICALSPEC = dp2px(VERTICALSPEC);
         MARGINBOTTOM = dp2px(MARGINBOTTOM);
-        MARGINTOP = dp2px(MARGINTOP);
         MARGIN = dp2px(MARGIN);
+        marginTop = textsize + VERTICALSPEC * 2;
 
-        setBackgroundColor(Color.parseColor("#ffffff"));
+        setBackgroundResource(android.R.color.white);
     }
 
     @Override
@@ -98,7 +105,9 @@ public abstract class BaseChartView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w - MARGIN * 2;
-        mHeight = h - MARGINTOP - MARGINBOTTOM * 2;
+        mHeight = h - marginTop - MARGINBOTTOM * 2;
+        //平均值
+        mAvarageLine = mHeight / 6;
     }
 
     @Override
@@ -114,14 +123,11 @@ public abstract class BaseChartView extends View {
                 int diffX = Math.abs(moveX - downX);
                 int finalMoveX = moveX - MARGIN;//减去左侧边距
                 //滑动只在范围内开始绘制虚线
-                if (isLongPress && moveX > MARGIN && moveX < (mWidth + MARGIN) && moveY > MARGINTOP && moveY < (MARGINTOP + mHeight)) {
+                if (isLongPress && moveX > MARGIN && moveX < (mWidth + MARGIN) && moveY > marginTop && moveY < (marginTop + mHeight)) {
                     if (diffX >= mTouchSlop) {
-                        isCanvas = true;
 //                        calculateLong(finalMoveX);
                         longDownX = moveX;
                         postInvalidate();
-                    } else {
-                        isCanvas = false;
                     }
                 }
                 break;
@@ -160,18 +166,18 @@ public abstract class BaseChartView extends View {
     protected abstract void drawLeftText(Canvas canvas);
 
     /**
-     * 长按绘制
-     *
-     * @param canvas
-     */
-    protected abstract void drawLong(Canvas canvas);
-
-    /**
      * 绘制曲线或柱状图
      *
      * @param canvas
      */
     protected abstract void drawLine(Canvas canvas);
+
+    /**
+     * 长按绘制
+     *
+     * @param canvas
+     */
+    protected abstract void drawLong(Canvas canvas);
 
     /**
      * 绘制框架
@@ -180,22 +186,21 @@ public abstract class BaseChartView extends View {
         Paint paint = getLinePaint();
         //绘制边框
         Path path = new Path();
-        path.moveTo(MARGIN, MARGINTOP);
-        path.lineTo(mWidth + MARGIN, MARGINTOP);
-        path.lineTo(mWidth + MARGIN, mHeight + MARGINTOP);
-        path.lineTo(MARGIN, mHeight + MARGINTOP);
-        path.lineTo(MARGIN, MARGINTOP);
+
+        path.moveTo(MARGIN, marginTop);
+        path.lineTo(mWidth + MARGIN, marginTop);
+        path.lineTo(mWidth + MARGIN, mHeight + marginTop);
+        path.lineTo(MARGIN, mHeight + marginTop);
+        path.lineTo(MARGIN, textsize + VERTICALSPEC * 2);
         path.close();
         canvas.drawPath(path, paint);
         path.reset();
 
-        //平均值
-        mAvarageLine = mHeight / 6;
         //绘制横线
         paint.setPathEffect(new DashPathEffect(new float[]{8, 8}, 0));
         paint.setColor(Color.parseColor(COLOR_DASHLINE));
         for (int i = 1; i <= 5; i++) {
-            float startY = (MARGINTOP + mAvarageLine * i);
+            float startY = (marginTop + mAvarageLine * i);
             canvas.drawLine(MARGIN, startY, mWidth + MARGIN, startY, paint);
         }
     }
@@ -211,7 +216,7 @@ public abstract class BaseChartView extends View {
         }
 
         for (int i = 0; i < values.length; i++) {
-            canvas.drawText(values[i], MARGIN + 10, MARGINTOP - 10 + mAvarageLine * i, paint);
+            canvas.drawText(values[i], MARGIN + 10, marginTop - 10 + mAvarageLine * i, paint);
         }
         paint.reset();
     }
@@ -228,7 +233,7 @@ public abstract class BaseChartView extends View {
         paint.setAntiAlias(true);
         paint.setStrokeWidth(STOREWIDTH);
         //绘制底部日期
-        paint.setTextSize(textsize);
+        paint.setTextSize(dateTextSize);
 
         paint.setColor(Color.parseColor(COLOR_BOTTOMDATEBG));
         int textLength = (int) paint.measureText(text);
@@ -243,16 +248,16 @@ public abstract class BaseChartView extends View {
             left = right - textLength - VERTICALSPEC * 2;
         }
         //绘制日期的背景
-        Rect rect = new Rect(left, MARGINTOP + mHeight + VERTICALSPEC, right, MARGINTOP + mHeight + textsize + VERTICALSPEC*2);
+        Rect rect = new Rect(left, marginTop + mHeight + VERTICALSPEC * 2, right, marginTop + mHeight + textsize + VERTICALSPEC * 3);
         canvas.drawRect(rect, paint);
 
         //绘制底部日期
-        paint.setTextSize(textsize);
+        paint.setTextSize(dateTextSize);
         paint.setTypeface(Typeface.DEFAULT);
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor(COLOR_BOTTOMDATE));
-        canvas.drawText(text, left + VERTICALSPEC, MARGINTOP + mHeight + 40 + VERTICALSPEC, paint);
+        canvas.drawText(text, left + VERTICALSPEC, marginTop + mHeight + textsize + VERTICALSPEC * 2, paint);
     }
 
     /**
@@ -296,7 +301,7 @@ public abstract class BaseChartView extends View {
      * @param isSymbol 是否添加+-符号
      * @return
      */
-    protected String[] calculateAvarage(double maxValue, boolean isSymbol) {
+    protected String[] calculateAvarage(float maxValue, boolean isSymbol) {
         if (maxValue == 0) {
             Toast.makeText(context, "最大值不能是0", Toast.LENGTH_SHORT).show();
             return null;
@@ -311,8 +316,6 @@ public abstract class BaseChartView extends View {
         }
         return textValue;
     }
-
-    private static final String TAG = "zpy_BaseChartView";
 
     //左侧数据添加到数组中
     private void addData(boolean isSymbol, String[] textValue, int tempIndex, int index) {
@@ -352,5 +355,19 @@ public abstract class BaseChartView extends View {
             longDownX = e.getX()/*- MARGIN*/;
             postInvalidate();
         }
+    }
+
+    protected String formatDate(String date, String currentRegex, String finalRegex) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(currentRegex);
+        try {
+            Date parse = simpleDateFormat.parse(date);
+            simpleDateFormat = new SimpleDateFormat(finalRegex);
+            return simpleDateFormat.format(parse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+
     }
 }

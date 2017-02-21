@@ -5,15 +5,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wei.demo.ColumnBean;
+import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.R;
-import com.wei.demo.utils.StringUtil;
 import com.wei.demo.view.TimeSharingView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by Administrator on 2017/1/1.
@@ -59,8 +56,8 @@ public class CurvesPager extends BasePager {
         ArrayList<ColumnBean> list = new ArrayList<ColumnBean>();
         for (int i = 0; i < 49; i++) {
             ColumnBean columnBean = new ColumnBean();
-            double value = ((Math.random() * 10000));
-            double netValue = ((Math.random() * 2));
+            float value = (float) (Math.random() * 10000);
+            float netValue = (float) (Math.random() * 2);
             value = getDecimal(value);
             columnBean.setValue(value);
             columnBean.setNetValue(get4Decimal(netValue));
@@ -85,14 +82,14 @@ public class CurvesPager extends BasePager {
 
     }
 
-    private double getDecimal(double value) {
+    private float getDecimal(double value) {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        return Double.parseDouble(decimalFormat.format(value));
+        return Float.parseFloat(decimalFormat.format(value));
     }
 
-    private double get4Decimal(double value) {
+    private float get4Decimal(double value) {
         DecimalFormat decimalFormat = new DecimalFormat("#.0000");
-        return Double.parseDouble(decimalFormat.format(value));
+        return Float.parseFloat(decimalFormat.format(value));
     }
 
     //快速排序

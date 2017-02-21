@@ -113,21 +113,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private static final String TAG = "zpy_MainActivity";
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.e(TAG, "onSaveInstanceState: " + (outState == null));
-        Log.e(TAG, "onSaveInstanceState: " + outState.toString());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.e(TAG, "onRestoreInstanceState: " + (savedInstanceState == null));
-        if(savedInstanceState != null){
-            Log.e(TAG, "onRestoreInstanceState: " + savedInstanceState.toString());
-        }
-    }
 }

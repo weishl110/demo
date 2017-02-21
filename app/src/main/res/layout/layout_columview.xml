@@ -4,33 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/get"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:background="@color/actionbar_background"
-            android:gravity="center"
-            android:text="获取数据"
-            android:layout_marginLeft="12dp"
-            android:textColor="@android:color/black"
-            android:textSize="20sp" />
-
-
-        <com.wei.demo.view.ChartView
-            android:id="@+id/chartview"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:visibility="gone"
-            android:background="@android:color/white" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <com.wei.demo.view.bitmap.ColumnView
-            android:id="@+id/columview"
-            android:layout_width="match_parent"
-            android:layout_height="400dp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/get"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="12dp"
+                android:background="@color/actionbar_background"
+                android:gravity="center"
+                android:text="获取数据"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
+
+            <com.wei.demo.view.ChartView
+                android:id="@+id/chartview"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@android:color/white"
+                android:visibility="visible" />
+
+            <com.wei.demo.view.bitmap.ColumnView
+                android:id="@+id/columview"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

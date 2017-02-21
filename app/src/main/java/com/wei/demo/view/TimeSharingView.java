@@ -17,7 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import com.wei.demo.ColumnBean;
+import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointF;
 import com.wei.demo.utils.StringUtil;
 
@@ -267,7 +267,7 @@ public class TimeSharingView extends View {
             //绘制背景
             PointF pointF = pointLists.get(0);
             //设置渐变背景
-            LinearGradient linearGradient = new LinearGradient(pointF.x, MARGINTOP, 0, mHeight,
+            LinearGradient linearGradient = new LinearGradient(pointF.x, MARGINTOP, 0, MARGINTOP + mHeight,
                     Color.parseColor(COLOR_BLUE), Color.parseColor(COLOR_BLUE_ALPHA), Shader.TileMode.MIRROR);
             paint.setShader(linearGradient);
             paint.setStyle(Paint.Style.FILL);

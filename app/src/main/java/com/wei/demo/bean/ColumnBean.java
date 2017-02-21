@@ -1,13 +1,19 @@
-package com.wei.demo;
+package com.wei.demo.bean;
 
 /**
  * Created by Administrator on 2016/12/24.
  */
 
 public class ColumnBean {
+    //日期
     private String date;
-    private double value;
-    private double netValue;
+    //
+    private float value;
+    //总资产
+    private float totalValue;
+    //持有资产
+    private float hasValue;
+    private float netValue;
 
     public String getDate() {
         return date;
@@ -17,11 +23,11 @@ public class ColumnBean {
         this.date = date;
     }
 
-    public double getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(float value) {
         this.value = value;
     }
 
@@ -29,7 +35,7 @@ public class ColumnBean {
         return netValue;
     }
 
-    public void setNetValue(double netValue) {
+    public void setNetValue(float netValue) {
         this.netValue = netValue;
     }
 

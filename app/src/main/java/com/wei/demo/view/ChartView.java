@@ -1,6 +1,7 @@
 package com.wei.demo.view;
 
 import android.content.Context;
+import android.drm.DrmStore;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -8,24 +9,19 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.support.annotation.Dimension;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.webkit.WebSettings;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wei.demo.ColumnBean;
+import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.ColumnLocation;
 import com.wei.demo.bean.PointF;
 
-import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -254,14 +250,14 @@ public class ChartView extends SurfaceView {
         paint.setStyle(Paint.Style.FILL);
         int centerLine = avarageLine * 3 + MARGINTOP;
 
-        ColumnBean columnBean = list.get(0);
-        String date_value = columnBean.getDate();
-        dateIndex = Integer.valueOf(date_value.substring(date_value.lastIndexOf("-") + 1)) - 1;
+//        ColumnBean columnBean = list.get(0);
+//        String date_value = columnBean.getDate();
+//        dateIndex = Integer.valueOf(date_value.substring(date_value.lastIndexOf("-") + 1)) - 1;
         for (int i = 0; i < list.size(); i++) {
 
-            ColumnBean columnBean2 = list.get(i);
-            String date2 = columnBean2.getDate();
-            int index2 = Integer.valueOf(date2.substring(date2.lastIndexOf("-") + 1)) - 1;
+//            ColumnBean columnBean2 = list.get(i);
+//            String date2 = columnBean2.getDate();
+//            int index2 = Integer.valueOf(date2.substring(date2.lastIndexOf("-") + 1)) - 1;
 
             //每个柱图的高度
             double value = list.get(i).getValue();
@@ -276,9 +272,8 @@ public class ChartView extends SurfaceView {
                 endY = centerLine - endY;
             }
             endY = formatValue(endY);
-            int startX = ((int) (index2 * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) /*+ orange*/);
+            int startX = ((int) (i * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) /*+ orange*/);
             int endX = (int) (startX + mColumnWidth);
-            int left = MARGIN + STOREWIDTH;
             //存放左侧和右侧的点
             PointF pointF = new PointF();
             pointF.x = startX;
@@ -291,7 +286,6 @@ public class ChartView extends SurfaceView {
             rect.right = endX;
             rect.bottom = value < 0 ? (int) endY : centerLine;
             canvas.drawRect(rect, paint);
-//            }
         }
         //非常按时绘制底部日期
         if (!isLongPress) {
@@ -312,9 +306,7 @@ public class ChartView extends SurfaceView {
             if (endStartX + textWidth > MARGIN + STOREWIDTH + mWidth) {
                 endStartX = (int) (MARGIN + mWidth - textWidth);
             }
-
-            Log.e(TAG, "drawLine: startX = " + startX + "  endX = "+endStartX);
-            canvas.drawText(startDate, startX, MARGINTOP + mHeight +textsize, paint);
+            canvas.drawText(startDate, startX, MARGINTOP + mHeight + textsize, paint);
             canvas.drawText(endDate, endStartX, MARGINTOP + mHeight + textsize, paint);
 
         }

@@ -7,19 +7,16 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.LineHeightSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.wei.demo.view.ChartView;
-import com.wei.demo.ColumnBean;
+import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.R;
 import com.wei.demo.view.bitmap.ColumnView;
 
-import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -93,6 +90,7 @@ public class ColumViewPager extends BasePager {
     public void initData() {
         ArrayList<ColumnBean> list = getData();
         columnView.setData(list);
+        chartview.setData(list);
 
     }
 
@@ -101,24 +99,25 @@ public class ColumViewPager extends BasePager {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.get:
-                columnView.setData(getData());
-                chartview.setData(getData());
-                String text = "10432.42%";
-                SpannableString spannableString = setTextColorAndSize(text, Color.RED, 10, text.indexOf("%"), text.length(), true);
-                Log.e(TAG, "initData: spannable = " + spannableString);
-                DisplayMetrics metrics = weak.get().getResources().getDisplayMetrics();
-                float density = metrics.density;
-                int densityDpi = metrics.densityDpi;
-                float scaledDensity = metrics.scaledDensity;
-                DisplayMetrics displayMetrics = weak.get().getResources().getDisplayMetrics();
-                int widthPixels = displayMetrics.widthPixels;
-                int heightPixels = displayMetrics.heightPixels;
-                int width = btn_get.getWidth();
-                Log.e(TAG, "onClick:  px2dp = " + px2dp(width));
-                double screenSize = getScreenSizeOfDevice();
-                double v1 = Math.sqrt(widthPixels * widthPixels + heightPixels * heightPixels) / screenSize;
-                Log.e(TAG, "onClick: sprt = " + v1);
-                Log.e(TAG, "onClick: density = " + density + "   densityDpi = " + densityDpi + "   scaleDensity = " + scaledDensity + "  width = " + btn_get.getWidth());
+                ArrayList<ColumnBean> data = getData();
+                columnView.setData(data);
+                chartview.setData(data);
+//                String text = "10432.42%";
+//                SpannableString spannableString = setTextColorAndSize(text, Color.RED, 10, text.indexOf("%"), text.length(), true);
+//                Log.e(TAG, "initData: spannable = " + spannableString);
+//                DisplayMetrics metrics = weak.get().getResources().getDisplayMetrics();
+//                float density = metrics.density;
+//                int densityDpi = metrics.densityDpi;
+//                float scaledDensity = metrics.scaledDensity;
+//                DisplayMetrics displayMetrics = weak.get().getResources().getDisplayMetrics();
+//                int widthPixels = displayMetrics.widthPixels;
+//                int heightPixels = displayMetrics.heightPixels;
+//                int width = btn_get.getWidth();
+//                Log.e(TAG, "onClick:  px2dp = " + px2dp(width));
+//                double screenSize = getScreenSizeOfDevice();
+//                double v1 = Math.sqrt(widthPixels * widthPixels + heightPixels * heightPixels) / screenSize;
+//                Log.e(TAG, "onClick: sprt = " + v1);
+//                Log.e(TAG, "onClick: density = " + density + "   densityDpi = " + densityDpi + "   scaleDensity = " + scaledDensity + "  width = " + btn_get.getWidth());
                 break;
             default:
                 break;
@@ -153,24 +152,24 @@ public class ColumViewPager extends BasePager {
     //创建假数据
     public ArrayList<ColumnBean> getData() {
         ArrayList<ColumnBean> list = new ArrayList<ColumnBean>();
-        int tempIndex = 10;
-        for (int i = 0; i < 30; i++) {
+        int tempIndex = 0;
+        for (int i = 0; i < 10; i++) {
             ColumnBean columnBean = new ColumnBean();
-            double value = (10000 - ((Math.random() * 20000)));
+            float value = (float) (10000 - ((Math.random() * 20000)));
             value = getDecimal(value);
             columnBean.setValue(value);
             if (tempIndex + 1 < 10) {
-                columnBean.setDate("2016-11-0" + (tempIndex +=1));
+                columnBean.setDate("2016020" + (tempIndex +=1));
             } else {
-                columnBean.setDate("2016-11-" + (tempIndex += 1));
+                columnBean.setDate("201602" + (tempIndex += 1));
             }
             list.add(columnBean);
         }
         return list;
     }
 
-    private double getDecimal(double value) {
+    private float getDecimal(double value) {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        return Double.parseDouble(decimalFormat.format(value));
+        return Float.parseFloat(decimalFormat.format(value));
     }
 }

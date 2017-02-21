@@ -1,39 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/ll"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="newspager"
-        android:visibility="gone"
-        android:background="@drawable/bg"
-        android:textColor="@drawable/tv_bg"
-        android:textSize="35sp" />
-    <TextView
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="newspager"
-        android:background="@drawable/bg"
-        android:textColor="@drawable/tv_bg"
-        android:textSize="35sp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <com.wei.demo.view.TestView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:visibility="gone"
-        android:background="@android:color/holo_blue_bright"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <com.wei.demo.view.bitmap.ColumnView
-        android:id="@+id/columview"
-        android:layout_width="match_parent"
-        android:layout_height="400dp" />
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg"
+                android:gravity="center"
+                android:text="newspager"
+                android:textColor="@drawable/tv_bg"
+                android:textSize="35sp"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg"
+                android:gravity="center"
+                android:text="newspager"
+                android:textColor="@drawable/tv_bg"
+                android:textSize="35sp" />
+
+            <com.wei.demo.view.FloatingView
+                android:id="@+id/floatingview"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp" />
+
+            <com.wei.demo.view.bitmap.AssetsMovementsView
+                android:id="@+id/assets_movementview"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
