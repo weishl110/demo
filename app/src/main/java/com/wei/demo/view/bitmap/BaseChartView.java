@@ -211,12 +211,10 @@ public abstract class BaseChartView extends View {
      * @param values 左侧数值数组
      **/
     protected void drawLeftText(Canvas canvas, String[] values, Paint paint) {
-        if (values == null || values.length == 0) {
-            return;
-        }
+        if (values == null || values.length == 0) return;
 
         for (int i = 0; i < values.length; i++) {
-            canvas.drawText(values[i], MARGIN + 10, marginTop - 10 + mAvarageLine * i, paint);
+            canvas.drawText(values[i], MARGIN + STOREWIDTH + VERTICALSPEC, marginTop - VERTICALSPEC + mAvarageLine * i, paint);
         }
         paint.reset();
     }
@@ -337,7 +335,7 @@ public abstract class BaseChartView extends View {
     /**
      * 全部转换为两位小数
      */
-    protected String formatValue(double value) {
+    protected String formatValue(float value) {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
         return decimalFormat.format(value);
     }

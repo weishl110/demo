@@ -120,7 +120,7 @@ public class ColumnView extends BaseChartView {
         canvas.drawLine(startX, marginTop, startX, marginTop + mHeight, paint);
         //绘制底部日期
         paint.setTextSize(dateTextSize);
-        drawBottomText(canvas, paint, startX, formatDate(list.get(index).getDate(),"yyyyMMdd","yyyy-MM-dd"));
+        drawBottomText(canvas, paint, startX, formatDate(list.get(index).getDate(), "yyyyMMdd", "yyyy-MM-dd"));
     }
 
     @Override
@@ -140,9 +140,9 @@ public class ColumnView extends BaseChartView {
         pointFs.clear();
         for (int i = 0; i < list.size(); i++) {
             //每个柱图的高度
-            double value = list.get(i).getValue();
-            double percent = value / mAvarageValue;//比例
-            double endY = Math.abs(percent * mAvarageLine);
+            float value = list.get(i).getValue();
+            float percent = value / mAvarageValue;//比例
+            float endY = Math.abs(percent * mAvarageLine);
             //y点的结束点
             if (value < 0) {
                 paint.setColor(Color.parseColor(BLUECOLOR));
@@ -151,7 +151,7 @@ public class ColumnView extends BaseChartView {
                 paint.setColor(Color.parseColor(REDCOLOR));
                 endY = centerLine - endY;
             }
-            endY = Double.parseDouble(formatValue(endY));
+            endY = Float.parseFloat(formatValue(endY));
             int startX = ((int) (i * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) /*+ orange*/);
             int endX = (int) (startX + mColumnWidth);
             if (startX > MARGIN && endX < MARGIN + STOREWIDTH + mWidth) {
@@ -174,8 +174,8 @@ public class ColumnView extends BaseChartView {
             paint.setTextSize(dateTextSize);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor(COLOR_BOTTOMDATE));
-            String startDate = formatDate(list.get(0).getDate(),"yyyyMMdd","yyyy-MM-dd");
-            String endDate = formatDate(list.get(list.size() - 1).getDate(),"yyyyMMdd","yyyy-MM-dd");
+            String startDate = formatDate(list.get(0).getDate(), "yyyyMMdd", "yyyy-MM-dd");
+            String endDate = formatDate(list.get(list.size() - 1).getDate(), "yyyyMMdd", "yyyy-MM-dd");
             float textWidth = paint.measureText(startDate);
             int startX = (int) ((dateIndex * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) - textWidth / 2);
             int endStartX = (int) ((dateIndex + list.size() - 1) * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH - textWidth / 2);

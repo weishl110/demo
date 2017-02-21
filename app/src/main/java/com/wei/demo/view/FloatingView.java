@@ -114,7 +114,8 @@ public class FloatingView extends BaseChartView {
 
         //绘制渐变背景
         float x = pointFs.get(0).x;
-        LinearGradient linearGradient = new LinearGradient(x, marginTop, 0, marginTop + mHeight, Color.parseColor(BGSTARTCOLOR), Color.parseColor(BGENDCOLOR), Shader.TileMode.MIRROR);
+        LinearGradient linearGradient = new LinearGradient(x, marginTop, 0, marginTop + mHeight,
+                Color.parseColor(BGSTARTCOLOR), Color.parseColor(BGENDCOLOR), Shader.TileMode.MIRROR);
         paint.setShader(linearGradient);
         paint.setStrokeWidth(0);
         paint.setStyle(Paint.Style.FILL);

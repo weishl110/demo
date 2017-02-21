@@ -39,8 +39,30 @@ public class ColumnBean {
         this.netValue = netValue;
     }
 
+    public float getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(float totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public float getHasValue() {
+        return hasValue;
+    }
+
+    public void setHasValue(float hasValue) {
+        this.hasValue = hasValue;
+    }
+
     @Override
     public String toString() {
-        return "ColumnBean{" + " date= " + date + ",  value=" + value + ", netValue = " + netValue + '}';
+        return "ColumnBean{" +
+                "date='" + date + '\'' +
+                ", value=" + value +
+                ", totalValue=" + totalValue +
+                ", hasValue=" + hasValue +
+                ", netValue=" + netValue +
+                '}';
     }
 }
