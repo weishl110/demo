@@ -62,6 +62,7 @@ public class AssetsMovementsView extends BaseChartView {
         if (leftTexts == null) return;
         Paint textPaint = getTextPaint(COLOR_LEFTTEXT, textsize);
         drawLeftText(canvas, leftTexts, textPaint);
+        drawLeftText(canvas, leftTexts, textPaint);
     }
 
     @Override
@@ -113,7 +114,6 @@ public class AssetsMovementsView extends BaseChartView {
             textX = MARGIN + STOREWIDTH + mWidth - textWidth;
             canvas.drawText(endDate, textX, y, textPaint);
         }
-
     }
 
     @Override

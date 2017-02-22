@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:background="@android:color/holo_blue_bright"
             android:padding="5dp"
-            android:visibility="gone"
             android:text="textview"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
