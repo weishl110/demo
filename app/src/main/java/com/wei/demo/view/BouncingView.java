@@ -18,8 +18,8 @@ public class BouncingView extends View {
 
     private static final String TAG = "zpy_BouncingView";
     private Path mPath;
-    private int mArcHeight = 10;
-    private int mMaxArcHeight = 500;
+    private int mArcHeight = 0;
+    private int mMaxArcHeight;
     private Paint mPaint;
     private Status mStatus = Status.STATUS_NONE;
 
@@ -43,9 +43,9 @@ public class BouncingView extends View {
         mPath = new Path();
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-//        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.parseColor("#ffffff"));
-        mMaxArcHeight = 600;
+        mMaxArcHeight = 130;
     }
 
     private enum Status {
@@ -54,7 +54,7 @@ public class BouncingView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-//        super.onDraw(canvas);
+
         int currentPointY = 0;
 
         switch (mStatus) {
@@ -69,26 +69,31 @@ public class BouncingView extends View {
                 break;
         }
 
+
+        int y = currentPointY - mArcHeight;
+        Log.e(TAG, "onDraw: currentPointY = " + currentPointY + "    y = " + y + "  height = " + getHeight() + "  maxHeight = " + mMaxArcHeight);
         mPath.reset();
         mPath.moveTo(0, currentPointY);
-        mPath.quadTo(getWidth() / 2, -(currentPointY + mArcHeight), getWidth(), currentPointY);
+        mPath.quadTo(getWidth() / 2, y, getWidth(), currentPointY);
         mPath.lineTo(getWidth(), getHeight());
         mPath.lineTo(0, getHeight());
         mPath.close();
 
         canvas.drawPath(mPath, mPaint);
+
+        super.onDraw(canvas);
     }
 
     public void show() {
         mStatus = Status.STATUS_UP;
         ValueAnimator valueAnimator = ValueAnimator.ofInt(0, mMaxArcHeight);
-        valueAnimator.setDuration(1000);
+        valueAnimator.setDuration(800);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 mArcHeight = (int) animation.getAnimatedValue();
                 if (mArcHeight == mMaxArcHeight) {
-//                    bounce();
+                    bounce();
                 }
                 postInvalidate();
             }
@@ -97,13 +102,13 @@ public class BouncingView extends View {
     }
 
     public void bounce() {
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(mMaxArcHeight, 0);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(mMaxArcHeight, 100);
         valueAnimator.setDuration(1000);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 mArcHeight = (int) animation.getAnimatedValue();
-                invalidate();
+                postInvalidate();
             }
         });
         valueAnimator.start();

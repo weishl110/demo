@@ -1,7 +1,6 @@
 package com.wei.demo.view.bitmap;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -32,7 +31,7 @@ public class AssetsMovementsView extends BaseChartView {
     //背景颜色
     private static final String BGSTARTCOLOR = "#66ff5a00";
     private static final String BGENDCOLOR = "#11ff5a00";
-    private static final String BGBLUESTARTCOLOR = "#66429AE6";
+    private static final String BGBLUESTARTCOLOR = "#77429AE6";
     private static final String BGBLUEENDCOLOR = "#11429AE6";
 
 
@@ -63,6 +62,7 @@ public class AssetsMovementsView extends BaseChartView {
         if (leftTexts == null) return;
         Paint textPaint = getTextPaint(COLOR_LEFTTEXT, textsize);
         drawLeftText(canvas, leftTexts, textPaint);
+        drawLeftText(canvas, leftTexts, textPaint);
     }
 
     @Override
@@ -71,29 +71,49 @@ public class AssetsMovementsView extends BaseChartView {
         int size = mTotalPointFs.size();
         PointF currentPointF, nextPointF;
         Paint paint = getLinePaint();
+        //绘制总资产
+        paint.setColor(Color.parseColor("#ff5a00"));
         for (int i = 0; i < size - 1; i++) {
             currentPointF = mTotalPointFs.get(i);
             nextPointF = mTotalPointFs.get(i + 1);
-            //绘制总资产
             canvas.drawLine(currentPointF.x, currentPointF.y, nextPointF.x, nextPointF.y, paint);
-            //绘制持有资产
+        }
+
+        //绘制持有资产
+        size = mHasAssetsPointFs.size() - 1;
+        paint.setColor(Color.parseColor("#429ae6"));
+        for (int i = 0; i < size; i++) {
             currentPointF = mHasAssetsPointFs.get(i);
             nextPointF = mHasAssetsPointFs.get(i + 1);
             canvas.drawLine(currentPointF.x, currentPointF.y, nextPointF.x, nextPointF.y, paint);
         }
-
         //绘制背景
-        LinearGradient linearGradient = new LinearGradient(0, marginTop + mHeight,0,marginTop+mHeight,
-                Color.parseColor(BGSTARTCOLOR),Color.parseColor(BGENDCOLOR), Shader.TileMode.MIRROR);
+//        paint.setColorFilter(new PorterDuffColorFilter(0x66429ae6, PorterDuff.Mode.XOR));
+        paint.setStyle(Paint.Style.FILL);
+//        paint.setStrokeWidth(0);
+        float x = mTotalPointFs.get(0).x;
+        LinearGradient linearGradient = new LinearGradient(x, marginTop, 0, marginTop + mHeight,
+                Color.parseColor(BGSTARTCOLOR), Color.parseColor(BGENDCOLOR), Shader.TileMode.MIRROR);
         paint.setShader(linearGradient);
         canvas.drawPath(totalAlphaPath, paint);
-        linearGradient = new LinearGradient(0, marginTop + mHeight,0,marginTop+mHeight,
-                Color.parseColor(BGBLUESTARTCOLOR),Color.parseColor(BGBLUEENDCOLOR), Shader.TileMode.MIRROR);
+
+        linearGradient = new LinearGradient(x, marginTop, x, marginTop + mHeight,
+                Color.parseColor(BGBLUESTARTCOLOR), Color.parseColor(BGBLUEENDCOLOR), Shader.TileMode.MIRROR);
         paint.setShader(linearGradient);
         canvas.drawPath(hasAssetAlphaPath, paint);
 
         //绘制底部日期
-
+        if (!isLongPress) {
+            Paint textPaint = getTextPaint(COLOR_BOTTOMDATE, dateTextSize);
+            String startDate = formatDate(list.get(0).getDate(), "yyyyMMdd", "yyyy-MM-dd");
+            String endDate = formatDate(list.get(list.size() - 1).getDate(), "yyyyMMdd", "yyyy-MM-dd");
+            float textWidth = textPaint.measureText(startDate);
+            float textX = MARGIN + STOREWIDTH;
+            float y = marginTop + mHeight + VERTICALSPEC + textsize;
+            canvas.drawText(startDate, textX, y, textPaint);
+            textX = MARGIN + STOREWIDTH + mWidth - textWidth;
+            canvas.drawText(endDate, textX, y, textPaint);
+        }
     }
 
     @Override
@@ -142,30 +162,32 @@ public class AssetsMovementsView extends BaseChartView {
      */
     private void calculatePointLocal(ArrayList<ColumnBean> list) {
         int size = list.size();
-        //持有资产的
-        ArrayList<PointF> hasAssetsPointFs = mHasAssetsPointFs;
-        ArrayList<PointF> totalPointFs = mTotalPointFs;
+        mHasAssetsPointFs.clear();
+        mTotalPointFs.clear();
 
         totalAlphaPath = new Path();
         hasAssetAlphaPath = new Path();
-        totalAlphaPath.moveTo(0, marginTop + mHeight);
-        hasAssetAlphaPath.moveTo(0, marginTop + mHeight);
+        totalAlphaPath.moveTo(MARGIN, marginTop + mHeight);
+        hasAssetAlphaPath.moveTo(MARGIN, marginTop + mHeight);
         for (int i = 0; i < size; i++) {
             PointF pointF = new PointF();
             ColumnBean columnBean = list.get(i);
             //持有资产
-            pointF.x = i * mPointSpec;
-            pointF.y = (maxValue - columnBean.getHasValue()) * mAvarageLine;
-            hasAssetsPointFs.add(pointF);
+            pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
+            pointF.y = (maxValue - columnBean.getHasValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2;
+            mHasAssetsPointFs.add(pointF);
 
             hasAssetAlphaPath.lineTo(pointF.x, pointF.y);
+            pointF = new PointF();
+            pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
             //总资产
-            pointF.y = (maxValue - columnBean.getTotalValue()) * mAvarageLine;
-            totalPointFs.add(pointF);
+            pointF.y = (maxValue - columnBean.getTotalValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2;
+            mTotalPointFs.add(pointF);
             totalAlphaPath.lineTo(pointF.x, pointF.y);
         }
-        totalAlphaPath.lineTo(0, marginTop + mHeight);
-        hasAssetAlphaPath.lineTo(0, marginTop + mHeight);
+        float x = mHasAssetsPointFs.get(mHasAssetsPointFs.size() - 1).x;
+        totalAlphaPath.lineTo(x, marginTop + mHeight);
+        hasAssetAlphaPath.lineTo(x, marginTop + mHeight);
         totalAlphaPath.close();
         hasAssetAlphaPath.close();
     }

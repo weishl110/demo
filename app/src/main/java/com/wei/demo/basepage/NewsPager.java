@@ -2,16 +2,14 @@ package com.wei.demo.basepage;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.R;
+import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.utils.StringUtil;
 import com.wei.demo.view.FloatingView;
 import com.wei.demo.view.bitmap.AssetsMovementsView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -83,7 +81,7 @@ public class NewsPager extends BasePager {
             value = StringUtil.getDecimal(value);
             float hasValue = (float) (((Math.random() * 100000)));
             hasValue = StringUtil.getDecimal(hasValue);
-            float totalValue = (float) (((Math.random() * 1000000)));
+            float totalValue = (float) (((Math.random() * 100000)));
             totalValue = StringUtil.getDecimal(totalValue);
 
             columnBean.setValue(value);

@@ -1,1 +1,1 @@
-include ':app', 'multiType', ':library'
+include ':app', 'multiType'
