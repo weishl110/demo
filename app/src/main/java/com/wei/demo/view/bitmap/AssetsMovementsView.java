@@ -3,16 +3,15 @@ package com.wei.demo.view.bitmap;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 
 import com.wei.demo.bean.ColumnBean;
-import com.wei.demo.bean.PointF;
 import com.wei.demo.bean.PointFLocal;
 
 import java.util.ArrayList;
@@ -39,6 +38,11 @@ public class AssetsMovementsView extends BaseChartView {
     private static final String BGBLUESTARTCOLOR = "#77429AE6";
     private static final String BGBLUEENDCOLOR = "#11429AE6";
 
+    private static final String COLOR_429AE6 = "#4a9ae6";
+    private static final String COLOR_FF5A00 = "#ff5a00";
+
+    private static final String[] texts = {"持有资产", "总资产"};
+
 
     public AssetsMovementsView(Context context) {
         super(context);
@@ -60,6 +64,36 @@ public class AssetsMovementsView extends BaseChartView {
             //计算点的位置
             calculatePointLocal(list);
         }
+    }
+
+    @Override
+    protected void drawOther(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.parseColor(COLOR_429AE6));
+        paint.setTextSize(textsize);
+
+        int tempLeft = mWidth / 2;
+        int left = tempLeft + tempLeft / 7 + MARGIN;
+        int top = marginTop - textsize - VERTICALSPEC / 2;
+        int right = left + block_size;
+        int bottom = top + block_size;
+        Rect rect = new Rect(left, top, right, bottom);
+        canvas.drawRect(rect, paint);
+        paint.setColor(Color.parseColor(COLOR_LEFTTEXT));
+        canvas.drawText(texts[0], right + VERTICALSPEC * 2, bottom, paint);
+
+        //测量文案的宽度
+        paint.setColor(Color.parseColor(COLOR_FF5A00));
+        float textWidth = paint.measureText(texts[0]);
+        left = (int) (left + textWidth + tempLeft / 4);
+        right = left + block_size;
+        rect = new Rect(left, top, right, bottom);
+        canvas.drawRect(rect, paint);
+        paint.setColor(Color.parseColor(COLOR_LEFTTEXT));
+        canvas.drawText(texts[1], right + VERTICALSPEC * 2, bottom, paint);
+
     }
 
     @Override

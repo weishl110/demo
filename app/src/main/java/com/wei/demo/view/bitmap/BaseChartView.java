@@ -47,6 +47,8 @@ public abstract class BaseChartView extends View {
     protected int MARGINBOTTOM = 16;
     protected int VERTICALSPEC = 2;//柱状图间距
 
+    protected int block_size = 10;
+
     //底部背景日期颜色
     protected final String COLOR_BOTTOMDATEBG = "#aaE2EBF9";
     //底部日期颜色
@@ -97,6 +99,7 @@ public abstract class BaseChartView extends View {
         VERTICALSPEC = dp2px(VERTICALSPEC);
         MARGINBOTTOM = dp2px(MARGINBOTTOM);
         MARGIN = dp2px(MARGIN);
+        block_size = dp2px(block_size);
         marginTop = textsize + VERTICALSPEC * 2;
         setBackgroundResource(android.R.color.white);
     }
@@ -173,6 +176,7 @@ public abstract class BaseChartView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBox(canvas);//绘制框架
+        drawOther(canvas);
         //绘制长按
         if (isSetData) {
             drawLeftText(canvas);
@@ -181,6 +185,14 @@ public abstract class BaseChartView extends View {
                 drawLong(canvas);
             }
         }
+    }
+
+    /**
+     * 子类在设置数据之前绘制其他
+     *
+     * @param canvas
+     */
+    protected void drawOther(Canvas canvas) {
     }
 
     /**
