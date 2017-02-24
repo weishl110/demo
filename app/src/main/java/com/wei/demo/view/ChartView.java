@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.ColumnLocation;
 import com.wei.demo.bean.PointF;
+import com.wei.demo.bean.PointFLocal;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ChartView extends SurfaceView {
     private static final String TAG = "zpy_ChartView";
 
     private ArrayList<ColumnBean> list = new ArrayList<>();
-    private ArrayList<PointF> pointFs = new ArrayList<>();//存放每个柱的左右侧位置
+    private ArrayList<PointFLocal> pointFs = new ArrayList<>();//存放每个柱的左右侧位置
     private Context context;
 
     //默认线的颜色
@@ -150,12 +151,10 @@ public class ChartView extends SurfaceView {
                     if (diffX >= touchSlop) {
                         isCanvas = true;
                         calculateLong(finalMoveX);
-                    } else {
+                    } else
                         isCanvas = false;
-                    }
                 } else {
                     isCanvas = false;
-
                     if (list.size() > 31) {
                         if (moveX - downX > 0 && !isMoveLeft) {
                             orange = moveX - downX + orange;
@@ -275,7 +274,7 @@ public class ChartView extends SurfaceView {
             int startX = ((int) (i * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) /*+ orange*/);
             int endX = (int) (startX + mColumnWidth);
             //存放左侧和右侧的点
-            PointF pointF = new PointF();
+            PointFLocal pointF = new PointFLocal();
             pointF.x = startX;
             pointF.endX = endX;
             pointFs.add(pointF);
@@ -321,11 +320,8 @@ public class ChartView extends SurfaceView {
             paint.reset();
             String date = list.get(index).getDate();
             drawBottomText(canvas, paint, startX, date);
-
-            Log.e(TAG, "drawColumnBitmap: date = " + date);
         }
     }
-
 
     /**
      * 绘制底部日期及背景

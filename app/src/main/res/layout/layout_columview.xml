@@ -25,18 +25,23 @@
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
-
-            <com.wei.demo.view.ChartView
-                android:id="@+id/chartview"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:background="@android:color/white"
-                android:visibility="visible" />
-
             <com.wei.demo.view.bitmap.ColumnView
                 android:id="@+id/columview"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="300dp" />
+
+
+            <com.wei.demo.view.bitmap.FloatingView
+                android:id="@+id/floatingview"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp" />
+
+            <com.wei.demo.view.bitmap.AssetsMovementsView
+                android:id="@+id/assets_movementview"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

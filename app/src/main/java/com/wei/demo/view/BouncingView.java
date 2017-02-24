@@ -15,75 +15,56 @@ import android.view.View;
  */
 
 public class BouncingView extends View {
-
-    private static final String TAG = "zpy_BouncingView";
     private Path mPath;
-    private int mArcHeight = 0;
-    private int mMaxArcHeight;
     private Paint mPaint;
+    private int mArcHeight = 0,mMaxArcHeight;
     private Status mStatus = Status.STATUS_NONE;
-
     public BouncingView(Context context) {
         super(context);
         init();
     }
-
     public BouncingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
-
     public BouncingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init();
     }
-
     private void init() {
         mPath = new Path();
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.parseColor("#ffffff"));
-        mMaxArcHeight = 130;
+        mMaxArcHeight = 150;
     }
-
     private enum Status {
         STATUS_NONE, STATUS_UP, STATUS_DOWN;
     }
-
     @Override
     protected void onDraw(Canvas canvas) {
-
         int currentPointY = 0;
-
         switch (mStatus) {
             case STATUS_NONE:
                 currentPointY = 0;
                 break;
             case STATUS_DOWN:
-                currentPointY = -mMaxArcHeight;
+                currentPointY = mMaxArcHeight;
                 break;
             case STATUS_UP:
                 currentPointY = (int) ((getHeight() * (1 - (float) mArcHeight / mMaxArcHeight)) + mMaxArcHeight);
                 break;
         }
-
-
         int y = currentPointY - mArcHeight;
-        Log.e(TAG, "onDraw: currentPointY = " + currentPointY + "    y = " + y + "  height = " + getHeight() + "  maxHeight = " + mMaxArcHeight);
         mPath.reset();
         mPath.moveTo(0, currentPointY);
         mPath.quadTo(getWidth() / 2, y, getWidth(), currentPointY);
         mPath.lineTo(getWidth(), getHeight());
         mPath.lineTo(0, getHeight());
         mPath.close();
-
         canvas.drawPath(mPath, mPaint);
-
-        super.onDraw(canvas);
     }
-
     public void show() {
         mStatus = Status.STATUS_UP;
         ValueAnimator valueAnimator = ValueAnimator.ofInt(0, mMaxArcHeight);
@@ -100,10 +81,10 @@ public class BouncingView extends View {
         });
         valueAnimator.start();
     }
-
     public void bounce() {
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(mMaxArcHeight, 100);
-        valueAnimator.setDuration(1000);
+        mStatus = Status.STATUS_DOWN;
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(mMaxArcHeight, 0);
+        valueAnimator.setDuration(500);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {

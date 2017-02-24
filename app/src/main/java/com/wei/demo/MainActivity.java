@@ -11,9 +11,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,11 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
 
-        TextView tv = (TextView) findViewById(R.id.tv);
-        tv.setOnClickListener(View ->{
-            startActivity(new Intent(this,SencondActivity.class));
-        });
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewpager = (MyViewPager) findViewById(R.id.viewpager);
         tablayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -78,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 pagerList.get(position).initData();
+            }
+        });
+
+        left_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                drawerLayout.closeDrawers();
+                startActivity(new Intent(getApplicationContext(),SencondActivity.class));
             }
         });
     }

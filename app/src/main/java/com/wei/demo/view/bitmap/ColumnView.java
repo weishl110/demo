@@ -7,11 +7,11 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointF;
+import com.wei.demo.bean.PointFLocal;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +29,7 @@ public class ColumnView extends BaseChartView {
     private static final String TAG = "zpy_ColumnView";
 
     private ArrayList<ColumnBean> list;
-    private ArrayList<PointF> pointFs = new ArrayList<>();//存放每个柱的左右侧位置
+    private ArrayList<PointFLocal> pointFs = new ArrayList<>();//存放每个柱的左右侧位置
 
     private int dateIndex = 0;
     private float mColumnWidth;
@@ -76,8 +76,8 @@ public class ColumnView extends BaseChartView {
     protected void drawLong(Canvas canvas) {
 
         int size = pointFs.size();
-        PointF onePointF = pointFs.get(0);
-        PointF lastPointF = pointFs.get(size - 1);
+        PointFLocal onePointF = pointFs.get(0);
+        PointFLocal lastPointF = pointFs.get(size - 1);
         //是否第一个点范围内
         if (longDownX <= onePointF.x || (longDownX > onePointF.x && longDownX < onePointF.endX + VERTICALSPEC / 2)) {
             drawDeshLine(canvas, onePointF.x, onePointF.endX, 0);
@@ -86,9 +86,9 @@ public class ColumnView extends BaseChartView {
             drawDeshLine(canvas, lastPointF.x, lastPointF.endX, size - 1);
         } else {
             //在中间
-            PointF prePointF, nextPoint;
+            PointFLocal prePointF, nextPoint;
             for (int i = 1; i < size - 1; i++) {
-                PointF pointF = pointFs.get(i);
+                PointFLocal pointF = pointFs.get(i);
                 prePointF = pointFs.get(i - 1);
                 nextPoint = pointFs.get(i + 1);
 
@@ -126,7 +126,6 @@ public class ColumnView extends BaseChartView {
     @Override
     protected void drawLine(Canvas canvas) {
         if (list == null || list.size() == 0) {
-            Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
             return;
         }
         Paint paint = getLinePaint();
@@ -138,7 +137,8 @@ public class ColumnView extends BaseChartView {
 //        dateIndex = Integer.valueOf(date_value.substring(date_value.lastIndexOf("-") + 1)) - 1;
 
         pointFs.clear();
-        for (int i = 0; i < list.size(); i++) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
             //每个柱图的高度
             float value = list.get(i).getValue();
             float percent = value / mAvarageValue;//比例
@@ -156,7 +156,7 @@ public class ColumnView extends BaseChartView {
             int endX = (int) (startX + mColumnWidth);
             if (startX > MARGIN && endX < MARGIN + STOREWIDTH + mWidth) {
                 //记录每个柱状图的左右点
-                PointF pointF = new PointF();
+                PointFLocal pointF = new PointFLocal();
                 pointF.x = startX;
                 pointF.endX = endX;
                 pointFs.add(pointF);
@@ -197,7 +197,6 @@ public class ColumnView extends BaseChartView {
      */
     private int getMaxValueIndex() {
         if (list == null || list.size() == 0) {
-            Toast.makeText(context, "没有数据", Toast.LENGTH_SHORT).show();
             return -1;
         }
         int size = list.size();
@@ -214,13 +213,18 @@ public class ColumnView extends BaseChartView {
     }
 
     public void setData(ArrayList<ColumnBean> list) {
+        if (list == null || list.size() == 0) {
+            isSetData = false;
+            postInvalidate();
+            return;
+        }
         this.list = list;
         //计算最大值
         int maxValueIndex = getMaxValueIndex();
         if (maxValueIndex == -1) {
             return;
         }
-        isSet = true;
+        isSetData = true;
         //计算左侧数值
         leftValues = calculateAvarage(list.get(maxValueIndex).getValue(), true);
         requestLayout();

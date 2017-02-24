@@ -3,19 +3,24 @@ package com.wei.demo.view.bitmap;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointF;
+import com.wei.demo.bean.PointFLocal;
 
 import java.util.ArrayList;
 
 /**
  * Created by ${wei} on 2017/2/21.
+ * <p>
+ * 资产走势
  */
 
 public class AssetsMovementsView extends BaseChartView {
@@ -24,8 +29,8 @@ public class AssetsMovementsView extends BaseChartView {
     private ArrayList<ColumnBean> list;
     private String[] leftTexts;
     private float maxValue;
-    private ArrayList<PointF> mTotalPointFs = new ArrayList<>();
-    private ArrayList<PointF> mHasAssetsPointFs = new ArrayList<>();
+    private ArrayList<PointFLocal> mTotalPointFs = new ArrayList<>();
+    private ArrayList<PointFLocal> mHasAssetsPointFs = new ArrayList<>();
     private Path totalAlphaPath, hasAssetAlphaPath;
 
     //背景颜色
@@ -62,14 +67,13 @@ public class AssetsMovementsView extends BaseChartView {
         if (leftTexts == null) return;
         Paint textPaint = getTextPaint(COLOR_LEFTTEXT, textsize);
         drawLeftText(canvas, leftTexts, textPaint);
-        drawLeftText(canvas, leftTexts, textPaint);
     }
 
     @Override
     protected void drawLine(Canvas canvas) {
         if (mTotalPointFs.size() == 0 || mHasAssetsPointFs.size() == 0) return;
         int size = mTotalPointFs.size();
-        PointF currentPointF, nextPointF;
+        PointFLocal currentPointF, nextPointF;
         Paint paint = getLinePaint();
         //绘制总资产
         paint.setColor(Color.parseColor("#ff5a00"));
@@ -118,21 +122,23 @@ public class AssetsMovementsView extends BaseChartView {
 
     @Override
     protected void drawLong(Canvas canvas) {
-
+        drawLongBottomDateAndDeshLine(canvas, mTotalPointFs, list, longDownX, "yyyyMMdd", "yyyy-MM-dd");
     }
 
 
     public void setData(ArrayList<ColumnBean> list) {
-        if (list == null || list.size() == 0)
+        if (list == null || list.size() == 0) {
+            isSetData = false;
+            postInvalidate();
             return;
+        }
         this.list = list;
-        isSet = true;
+        isSetData = true;
         requestLayout();
         //获取最大值
         maxValue = getMaxValueIndex(list);
         //计算左侧数值
         leftTexts = calculateLeftText(list, maxValue);
-
         postInvalidate();
     }
 
@@ -170,7 +176,7 @@ public class AssetsMovementsView extends BaseChartView {
         totalAlphaPath.moveTo(MARGIN, marginTop + mHeight);
         hasAssetAlphaPath.moveTo(MARGIN, marginTop + mHeight);
         for (int i = 0; i < size; i++) {
-            PointF pointF = new PointF();
+            PointFLocal pointF = new PointFLocal();
             ColumnBean columnBean = list.get(i);
             //持有资产
             pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
@@ -178,7 +184,7 @@ public class AssetsMovementsView extends BaseChartView {
             mHasAssetsPointFs.add(pointF);
 
             hasAssetAlphaPath.lineTo(pointF.x, pointF.y);
-            pointF = new PointF();
+            pointF = new PointFLocal();
             pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
             //总资产
             pointF.y = (maxValue - columnBean.getTotalValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2;

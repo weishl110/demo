@@ -7,8 +7,6 @@ import android.widget.TextView;
 import com.wei.demo.R;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.utils.StringUtil;
-import com.wei.demo.view.FloatingView;
-import com.wei.demo.view.bitmap.AssetsMovementsView;
 
 import java.util.ArrayList;
 
@@ -18,8 +16,6 @@ import java.util.ArrayList;
 
 public class NewsPager extends BasePager {
     private static final String TAG = "zpy_NewsPager";
-    private FloatingView floatingview;
-    private AssetsMovementsView assetsMovementsView;
 
     public NewsPager(Context context) {
         super(context);
@@ -28,29 +24,18 @@ public class NewsPager extends BasePager {
     @Override
     public View initView() {
         View view = View.inflate(weak.get(), R.layout.layout_newspager, null);
-        TextView tv = (TextView) view.findViewById(R.id.btn);
-        floatingview = (FloatingView) view.findViewById(R.id.floatingview);
-        assetsMovementsView = (AssetsMovementsView) view.findViewById(R.id.assets_movementview);
-        tv.setOnClickListener(View -> {
-            initData();
-        });
         TextView btn = (TextView) view.findViewById(R.id.btn);
         btn.setSelected(false);
         btn.setOnClickListener(View -> {
             initData();
             btn.setSelected(!btn.isSelected());
         });
-
-
         return view;
     }
 
     @Override
     public void initData() {
         ArrayList<ColumnBean> list = getData();
-        floatingview.setData(list);
-        ArrayList<ColumnBean> assetData = getAssetData();
-        assetsMovementsView.setData(assetData);
     }
 
     //创建假数据

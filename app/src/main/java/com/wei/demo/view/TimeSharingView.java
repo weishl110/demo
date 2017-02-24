@@ -304,7 +304,7 @@ public class TimeSharingView extends View {
             canvas.drawLine(point.x, MARGINTOP, point.x, MARGINTOP + mHeight, paint);
             //绘制底部时间  绘制左侧净值
             ColumnBean columnBean = list.get(index);
-            drawLongText(canvas, getTextPaint(), (int) point.x, point.y, columnBean.getDate(), String.valueOf(columnBean.getNetValue()));
+            drawLongText(canvas, getTextPaint(), (int) point.x, point.y, columnBean.getDate(), get4Decimal(columnBean.getNetValue()));
             paint.reset();
         }
     }

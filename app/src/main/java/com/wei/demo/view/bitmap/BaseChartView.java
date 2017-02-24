@@ -9,15 +9,23 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewParent;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 import android.widget.Toast;
+
+import com.wei.demo.bean.ColumnBean;
+import com.wei.demo.bean.PointFLocal;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -28,7 +36,7 @@ public abstract class BaseChartView extends View {
 
     protected static final String TAG = "zpy_BaseChartView";
     protected Context context;
-    protected int mWidth, mHeight, downX;
+    protected int mWidth, mHeight, downX, downY;
     //纵向平均值
     protected float mAvarageLine, mAvarageValue;
     //画笔的宽度
@@ -40,7 +48,7 @@ public abstract class BaseChartView extends View {
     protected int VERTICALSPEC = 2;//柱状图间距
 
     //底部背景日期颜色
-    protected final String COLOR_BOTTOMDATEBG = "#88E2EBF9";
+    protected final String COLOR_BOTTOMDATEBG = "#aaE2EBF9";
     //底部日期颜色
     protected final String COLOR_BOTTOMDATE = "#666666";
     //左侧文字颜色
@@ -54,10 +62,11 @@ public abstract class BaseChartView extends View {
     protected int textsize = 12;
     protected int dateTextSize = 14;
 
-    protected boolean isSet = false, isLongPress = false;
+    protected boolean isSetData = false, isLongPress = false;
     protected int mTouchSlop;//系统默认为滑动距离
     protected GestureDetector mGestureDetector;
     protected float longDownX;
+    private ScrollView mParentScrollView;
 
     public BaseChartView(Context context) {
         super(context);
@@ -77,7 +86,7 @@ public abstract class BaseChartView extends View {
     private void init(Context context) {
         this.context = context;
         //系统认为最小的滑动距离
-        isSet = false;
+        isSetData = false;
         isLongPress = false;
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -89,7 +98,6 @@ public abstract class BaseChartView extends View {
         MARGINBOTTOM = dp2px(MARGINBOTTOM);
         MARGIN = dp2px(MARGIN);
         marginTop = textsize + VERTICALSPEC * 2;
-
         setBackgroundResource(android.R.color.white);
     }
 
@@ -108,6 +116,9 @@ public abstract class BaseChartView extends View {
         mHeight = h - marginTop - MARGINBOTTOM * 2;
         //平均值
         mAvarageLine = mHeight / 6;
+
+        //查找父容器是否是scrollview
+        findParentScrollView(this);
     }
 
     @Override
@@ -116,12 +127,18 @@ public abstract class BaseChartView extends View {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 downX = (int) event.getX();
+                downY = (int) event.getY();
+                requestParentEvent(false);
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveX = (int) event.getX();
                 int moveY = (int) event.getY();
                 int diffX = Math.abs(moveX - downX);
+                int diffY = Math.abs(moveY - downY);
                 int finalMoveX = moveX - MARGIN;//减去左侧边距
+                //请求父容器是否拦截事件
+                requestParentEvent((diffY - mTouchSlop - 20 > diffX));
+
                 //滑动只在范围内开始绘制虚线
                 if (isLongPress && moveX > MARGIN && moveX < (mWidth + MARGIN) && moveY > marginTop && moveY < (marginTop + mHeight)) {
                     if (diffX >= mTouchSlop) {
@@ -133,6 +150,7 @@ public abstract class BaseChartView extends View {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                requestParentEvent(true);
                 isLongPress = false;
                 postInvalidate();
                 break;
@@ -140,19 +158,26 @@ public abstract class BaseChartView extends View {
         return mGestureDetector.onTouchEvent(event);
     }
 
-    long startTime = 0;
+    /**
+     * 请求父容器是否拦截事件
+     *
+     * @param flag true父容器拦截 false 父容器不拦截
+     */
+    private void requestParentEvent(boolean flag) {
+        if (mParentScrollView != null) {
+            mParentScrollView.requestDisallowInterceptTouchEvent(!flag);
+        }
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawBox(canvas);//绘制框架
         //绘制长按
-        if (isSet) {
-            startTime = System.currentTimeMillis();
+        if (isSetData) {
             drawLeftText(canvas);
             drawLine(canvas);
             if (isLongPress) {
-                startTime = System.currentTimeMillis();
                 drawLong(canvas);
             }
         }
@@ -237,16 +262,18 @@ public abstract class BaseChartView extends View {
         int textLength = (int) paint.measureText(text);
         int right = (int) (startX + textLength / 2 + VERTICALSPEC);
         int left = (int) (startX - textLength / 2 - VERTICALSPEC);
+
+        int topSpec = VERTICALSPEC * 3;
         if (left < MARGIN) {
             left = MARGIN;
-            right = left + textLength + VERTICALSPEC * 2;
+            right = left + textLength + topSpec;
         }
         if (right > MARGIN + mWidth) {
             right = MARGIN + mWidth;
-            left = right - textLength - VERTICALSPEC * 2;
+            left = right - textLength - topSpec;
         }
         //绘制日期的背景
-        Rect rect = new Rect(left, marginTop + mHeight + VERTICALSPEC * 2, right, marginTop + mHeight + textsize + VERTICALSPEC * 3);
+        Rect rect = new Rect(left, marginTop + mHeight + topSpec, right, marginTop + mHeight + textsize + topSpec * 2);
         canvas.drawRect(rect, paint);
 
         //绘制底部日期
@@ -255,7 +282,42 @@ public abstract class BaseChartView extends View {
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor(COLOR_BOTTOMDATE));
-        canvas.drawText(text, left + VERTICALSPEC, marginTop + mHeight + textsize + VERTICALSPEC * 2, paint);
+        canvas.drawText(text, left + VERTICALSPEC, (float) (marginTop + mHeight + textsize + topSpec * 1.4), paint);
+    }
+
+    /**
+     * @param canvas
+     * @param pointFLists      点的位置的集合
+     * @param dataList         数据集合
+     * @param longDownX        长按的x轴的位置
+     * @param currentDateRegex 日期现在的格式
+     * @param afterDateRegex   日期改变后的格式
+     */
+    protected void drawLongBottomDateAndDeshLine(Canvas canvas, ArrayList<PointFLocal> pointFLists, ArrayList<ColumnBean> dataList, float longDownX,
+                                                 String currentDateRegex, String afterDateRegex) {
+        int size = pointFLists.size();
+        PointFLocal currentPointF, prePointF, nextPointF;
+        float left, right;
+        for (int i = 0; i < size; i++) {
+            currentPointF = pointFLists.get(i);
+            prePointF = pointFLists.get(i == 0 ? i : i - 1);
+            nextPointF = pointFLists.get(i == size - 1 ? size - 1 : i + 1);
+            left = currentPointF.x - (currentPointF.x - prePointF.x) / 2;
+            right = currentPointF.x + (nextPointF.x - currentPointF.x) / 2;
+            if (longDownX <= right && longDownX >= left) {
+                //绘制底部日期
+                Paint paint = getLinePaint();
+                paint.setTextSize(dateTextSize);
+                paint.setColor(Color.parseColor(COLOR_BOTTOMDATE));
+                paint.setStyle(Paint.Style.FILL);
+                drawBottomText(canvas, paint, currentPointF.x, formatDate(dataList.get(i).getDate(), currentDateRegex, afterDateRegex));
+                //绘制虚线
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setPathEffect(new DashPathEffect(new float[]{8.0f, 8.0f,}, 0));
+                canvas.drawLine(currentPointF.x, marginTop + STOREWIDTH, currentPointF.x, marginTop + mHeight, paint);
+                break;
+            }
+        }
     }
 
     /**
@@ -291,13 +353,28 @@ public abstract class BaseChartView extends View {
         return paint;
     }
 
-
-    //计算平均值 并把左侧文案放到数组中
+    /**
+     *
+     */
+    protected void findParentScrollView(View view) {
+        ViewParent parent = view.getParent();
+        Log.e(TAG, "findParentScrollView: " + (parent == null) + "    " + (parent instanceof BaseChartView));
+        if (parent instanceof ScrollView || parent instanceof HorizontalScrollView) {
+            mParentScrollView = (ScrollView) parent;
+        } else if (view != null) {
+            view = (parent instanceof View ? (View) parent : null);
+            if (view != null) {
+                findParentScrollView(view);
+            }
+        }
+    }
 
     /**
+     * 计算平均值 并把左侧文案放到数组中
+     *
      * @param maxValue
      * @param isSymbol 是否添加+-符号
-     * @return
+     * @return 返回左侧数值的数组 上->下
      */
     protected String[] calculateAvarage(float maxValue, boolean isSymbol) {
         if (maxValue == 0) {
@@ -309,22 +386,17 @@ public abstract class BaseChartView extends View {
         int tempIndex = 3;
         //如果最大值是小数则 大-->小 设置数据
         for (int i = 0; i < 7; i++) {
-            addData(isSymbol, textValue, tempIndex, i);
+            if (isSymbol) {
+                textValue[i] = tempIndex > 0 ? "+" + formatValue(mAvarageValue * (tempIndex)) : formatValue(mAvarageValue * (tempIndex));
+            } else {
+                textValue[i] = formatValue(mAvarageValue * (tempIndex));
+            }
+            if (tempIndex == 0) {
+                textValue[i] = "0.00";
+            }
             tempIndex--;
         }
         return textValue;
-    }
-
-    //左侧数据添加到数组中
-    private void addData(boolean isSymbol, String[] textValue, int tempIndex, int index) {
-        if (isSymbol) {
-            textValue[index] = tempIndex > 0 ? "+" + formatValue(mAvarageValue * (tempIndex)) : formatValue(mAvarageValue * (tempIndex));
-        } else {
-            textValue[index] = formatValue(mAvarageValue * (tempIndex));
-        }
-        if (tempIndex == 0) {
-            textValue[index] = "0.00";
-        }
     }
 
     protected int dp2px(int dpValue) {
@@ -365,7 +437,5 @@ public abstract class BaseChartView extends View {
             e.printStackTrace();
         }
         return null;
-
-
     }
 }

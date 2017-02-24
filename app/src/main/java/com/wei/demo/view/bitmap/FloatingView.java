@@ -1,6 +1,5 @@
-package com.wei.demo.view;
+package com.wei.demo.view.bitmap;
 
-import android.app.Notification;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,14 +9,11 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointF;
-import com.wei.demo.view.bitmap.BaseChartView;
-
-import junit.framework.Test;
+import com.wei.demo.bean.PointFLocal;
 
 import java.util.ArrayList;
 
@@ -40,7 +36,7 @@ public class FloatingView extends BaseChartView {
 
     private ArrayList<ColumnBean> list;
     private String[] leftValues;
-    private ArrayList<PointF> pointFs;
+    private ArrayList<PointFLocal> pointFs;
     private Path alphaPath;
 
     public FloatingView(Context context) {
@@ -77,26 +73,26 @@ public class FloatingView extends BaseChartView {
 
     @Override
     protected void drawLong(Canvas canvas) {
-        int size = pointFs.size();
-
-        PointF centerPointF, prePointF, nextPointF;
-        Paint textPaint = getTextPaint(COLOR_BOTTOMDATE, dateTextSize);
-        for (int i = 0; i < size; i++) {
-            centerPointF = pointFs.get(i);
-            prePointF = pointFs.get(i == 0 ? 0 : i - 1);
-            nextPointF = pointFs.get(i == size - 1 ? i : i + 1);
-            float right = centerPointF.x + (nextPointF.x - centerPointF.x) / 2;
-            float left = centerPointF.x - (centerPointF.x - prePointF.x) / 2;
-            if (longDownX < right && longDownX > left) {
-                // 绘制底部日期
-                drawBottomText(canvas, textPaint, centerPointF.x, formatDate(list.get(i).getDate(), "yyyyMMdd", "yyyy-MM-dd"));
-                //绘制虚线
-                textPaint.setPathEffect(new DashPathEffect(new float[]{8, 8}, 0));
-                textPaint.setColor(Color.parseColor(COLOR_DASHLINE));
-                canvas.drawLine(centerPointF.x, marginTop, centerPointF.x, marginTop + mHeight, textPaint);
-
-            }
-        }
+        drawLongBottomDateAndDeshLine(canvas, pointFs, list, longDownX, "yyyyMMdd", "yyyy-MM-dd");
+//        int size = pointFs.size();
+//        PointF centerPointF, prePointF, nextPointF;
+//        Paint textPaint = getTextPaint(COLOR_BOTTOMDATE, dateTextSize);
+//        for (int i = 0; i < size; i++) {
+//            centerPointF = pointFs.get(i);
+//            prePointF = pointFs.get(i == 0 ? 0 : i - 1);
+//            nextPointF = pointFs.get(i == size - 1 ? i : i + 1);
+//            float right = centerPointF.x + (nextPointF.x - centerPointF.x) / 2;
+//            float left = centerPointF.x - (centerPointF.x - prePointF.x) / 2;
+//            if (longDownX < right && longDownX > left) {
+//                // 绘制底部日期
+//                drawBottomText(canvas, textPaint, centerPointF.x, formatDate(list.get(i).getDate(), "yyyyMMdd", "yyyy-MM-dd"));
+//                //绘制虚线
+//                textPaint.setPathEffect(new DashPathEffect(new float[]{8, 8}, 0));
+//                textPaint.setColor(Color.parseColor(COLOR_DASHLINE));
+//                canvas.drawLine(centerPointF.x, marginTop, centerPointF.x, marginTop + mHeight, textPaint);
+//
+//            }
+//        }
 
     }
 
@@ -106,9 +102,10 @@ public class FloatingView extends BaseChartView {
         paint.setColor(Color.parseColor(LINECOLOR));
         paint.setStrokeWidth(STOREWIDTH);
         paint.setStyle(Paint.Style.FILL);
-        for (int i = 0; i < pointFs.size() - 1; i++) {
-            PointF pointF = pointFs.get(i);
-            PointF nextPointF = pointFs.get(i + 1);
+        int size = pointFs.size();
+        for (int i = 0; i < size - 1; i++) {
+            PointFLocal pointF = pointFs.get(i);
+            PointFLocal nextPointF = pointFs.get(i + 1);
             canvas.drawLine(pointF.x, pointF.y, nextPointF.x, nextPointF.y, paint);
         }
 
@@ -154,10 +151,12 @@ public class FloatingView extends BaseChartView {
      */
     public void setData(ArrayList<ColumnBean> list) {
         if (list == null || list.size() == 0) {
+            isSetData = false;
+            postInvalidate();
             return;
         }
         this.list = list;
-        isSet = true;
+        isSetData = true;
         //获取最大绝对值
         float maxValue = Math.abs(list.get(getMaxValueIndex()).getValue());
         //计算左侧数值
@@ -193,8 +192,8 @@ public class FloatingView extends BaseChartView {
      *
      * @param list
      */
-    private ArrayList<PointF> calculatePointLocal(ArrayList<ColumnBean> list, float maxValue) {
-        ArrayList<PointF> pointFs = new ArrayList<>();
+    private ArrayList<PointFLocal> calculatePointLocal(ArrayList<ColumnBean> list, float maxValue) {
+        ArrayList<PointFLocal> pointFs = new ArrayList<>();
         int size = list.size();
         alphaPath = new Path();
 
@@ -204,7 +203,7 @@ public class FloatingView extends BaseChartView {
             float y = Math.abs(mAvarageLine * percent) + marginTop;
             //左侧边距 + 线宽 + x * 间距
             float x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
-            PointF pointF = new PointF();
+            PointFLocal pointF = new PointFLocal();
             pointF.x = x;
             pointF.y = y;
             pointFs.add(pointF);
