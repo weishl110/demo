@@ -34,14 +34,14 @@
             <com.wei.demo.view.bitmap.FloatingView
                 android:id="@+id/floatingview"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="330dp"
                 android:layout_marginTop="10dp" />
 
             <com.wei.demo.view.bitmap.AssetsMovementsView
                 android:id="@+id/assets_movementview"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="330dp"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

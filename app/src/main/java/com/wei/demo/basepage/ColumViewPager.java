@@ -11,12 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wei.demo.utils.StringUtil;
-import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.R;
-import com.wei.demo.view.bitmap.FloatingView;
+import com.wei.demo.bean.ColumnBean;
+import com.wei.demo.utils.StringUtil;
 import com.wei.demo.view.bitmap.AssetsMovementsView;
 import com.wei.demo.view.bitmap.ColumnView;
+import com.wei.demo.view.bitmap.FloatingView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -49,6 +49,8 @@ public class ColumViewPager extends BasePager {
         btn_get.setOnClickListener(View -> {
             initData();
         });
+
+
         return view;
     }
 
@@ -102,7 +104,7 @@ public class ColumViewPager extends BasePager {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.get:
-               initData();
+                initData();
 //                String text = "10432.42%";
 //                SpannableString spannableString = setTextColorAndSize(text, Color.RED, 10, text.indexOf("%"), text.length(), true);
 //                Log.e(TAG, "initData: spannable = " + spannableString);
@@ -160,7 +162,7 @@ public class ColumViewPager extends BasePager {
             value = getDecimal(value);
             columnBean.setValue(value);
             if (tempIndex + 1 < 10) {
-                columnBean.setDate("2016020" + (tempIndex +=1));
+                columnBean.setDate("2016020" + (tempIndex += 1));
             } else {
                 columnBean.setDate("201602" + (tempIndex += 1));
             }

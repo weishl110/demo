@@ -10,20 +10,22 @@ public class MyCalllBack extends ItemTouchHelper.Callback {
 
     private ICallBackSwopLocation iCallBackSwopLocation;
 
-    public MyCalllBack(ICallBackSwopLocation iCallBackSwopLocation){
+    public MyCalllBack(ICallBackSwopLocation iCallBackSwopLocation) {
         this.iCallBackSwopLocation = iCallBackSwopLocation;
     }
+
     //处理拖动方向
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragflags = ItemTouchHelper.DOWN| ItemTouchHelper.UP;//上下拖动
+        int dragflags = ItemTouchHelper.DOWN | ItemTouchHelper.UP;//上下拖动
         int swipeFlags = ItemTouchHelper.LEFT;//左右滑动
-        return makeMovementFlags(dragflags,swipeFlags);
+        return makeMovementFlags(dragflags, swipeFlags);
     }
-
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        iCallBackSwopLocation.onMoveItem(viewHolder.getAdapterPosition(),target.getAdapterPosition());
+        if (iCallBackSwopLocation != null) {
+            iCallBackSwopLocation.onMoveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        }
         return false;
     }
 
