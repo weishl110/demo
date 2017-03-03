@@ -156,7 +156,7 @@ public class ColumViewPager extends BasePager {
     public ArrayList<ColumnBean> getData() {
         ArrayList<ColumnBean> list = new ArrayList<ColumnBean>();
         int tempIndex = 0;
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 29; i++) {
             ColumnBean columnBean = new ColumnBean();
             float value = (float) (10000 - ((Math.random() * 20000)));
             value = getDecimal(value);
@@ -188,7 +188,7 @@ public class ColumViewPager extends BasePager {
             columnBean.setHasValue(hasValue);
             columnBean.setTotalValue(totalValue);
             if (tempIndex + 1 < 10) {
-                columnBean.setDate("2016110" + (tempIndex += 1));
+                columnBean.setDate("201110" + (tempIndex += 1));
             } else {
                 columnBean.setDate("201611" + (tempIndex += 1));
             }

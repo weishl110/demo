@@ -7,10 +7,9 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.wei.demo.bean.ColumnBean;
-import com.wei.demo.bean.PointF;
 import com.wei.demo.bean.PointFLocal;
 
 import java.text.ParseException;
@@ -33,7 +32,7 @@ public class ColumnView extends BaseChartView {
 
     private int dateIndex = 0;
     private float mColumnWidth;
-
+    private float daysOfMonth = 30.0f;
     //负值的颜色
     private static final String BLUECOLOR = "#88049e63";
     //正值的颜色
@@ -56,11 +55,10 @@ public class ColumnView extends BaseChartView {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         //每个柱状图的宽度 整体宽度-左右边距 - 左右线的宽度 - 间隔
-        float daysOfMonth = 30;
         if (list != null && list.size() > 0) {
             daysOfMonth = getDaysOfMonth(list.get(0).getDate(), "yyyyMMdd");
         }
-        mColumnWidth = (mWidth - STOREWIDTH * 2 - VERTICALSPEC * (daysOfMonth - 1)) / daysOfMonth;
+        mColumnWidth = (mWidth - STOREWIDTH * 2 - verticalSpec * (daysOfMonth - 1)) / daysOfMonth;
     }
 
     @Override
@@ -79,9 +77,9 @@ public class ColumnView extends BaseChartView {
         PointFLocal onePointF = pointFs.get(0);
         PointFLocal lastPointF = pointFs.get(size - 1);
         //是否第一个点范围内
-        if (longDownX <= onePointF.x || (longDownX > onePointF.x && longDownX < onePointF.endX + VERTICALSPEC / 2)) {
+        if (longDownX <= onePointF.x || (longDownX > onePointF.x && longDownX < onePointF.endX + verticalSpec / 2)) {
             drawDeshLine(canvas, onePointF.x, onePointF.endX, 0);
-        } else if (longDownX >= lastPointF.endX || (longDownX > (lastPointF.x - VERTICALSPEC / 2) && longDownX < lastPointF.endX)) {
+        } else if (longDownX >= lastPointF.endX || (longDownX > (lastPointF.x - verticalSpec / 2) && longDownX < lastPointF.endX)) {
             //是否在最后一个点范围内
             drawDeshLine(canvas, lastPointF.x, lastPointF.endX, size - 1);
         } else {
@@ -152,7 +150,7 @@ public class ColumnView extends BaseChartView {
                 endY = centerLine - endY;
             }
             endY = Float.parseFloat(formatValue(endY));
-            int startX = ((int) (i * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) /*+ orange*/);
+            int startX = ((int) (i * (mColumnWidth + verticalSpec) + MARGIN + STOREWIDTH) /*+ orange*/);
             int endX = (int) (startX + mColumnWidth);
             if (startX > MARGIN && endX < MARGIN + STOREWIDTH + mWidth) {
                 //记录每个柱状图的左右点
@@ -174,20 +172,31 @@ public class ColumnView extends BaseChartView {
             paint.setTextSize(dateTextSize);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor(COLOR_BOTTOMDATE));
+            paint.setTextAlign(Paint.Align.LEFT);
             String startDate = formatDate(list.get(0).getDate(), "yyyyMMdd", "yyyy-MM-dd");
-            String endDate = formatDate(list.get(list.size() - 1).getDate(), "yyyyMMdd", "yyyy-MM-dd");
             float textWidth = paint.measureText(startDate);
-            int startX = (int) ((dateIndex * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH) - textWidth / 2);
-            int endStartX = (int) ((dateIndex + list.size() - 1) * (mColumnWidth + VERTICALSPEC) + MARGIN + STOREWIDTH - textWidth / 2);
+            int startX = (int) ((dateIndex * (mColumnWidth + verticalSpec) + MARGIN + STOREWIDTH) - textWidth / 2);
 
             if (startX < MARGIN + STOREWIDTH) {
                 startX = MARGIN + STOREWIDTH;
             }
-            if (endStartX + textWidth > MARGIN + STOREWIDTH + mWidth) {
-                endStartX = (int) (MARGIN + mWidth - textWidth);
-            }
-            canvas.drawText(startDate, startX, marginTop + mHeight + textsize + VERTICALSPEC, paint);
-            canvas.drawText(endDate, endStartX, marginTop + mHeight + textsize + VERTICALSPEC, paint);
+            canvas.drawText(startDate, startX, marginTop + mHeight + textsize + verticalSpec, paint);
+            //绘制中间日期
+            if (size < daysOfMonth / 2) return;
+            int index = Math.round(daysOfMonth / 2) - 1;
+            String date = formatDate(list.get(index).getDate(), "yyyyMMdd", "yyyy-MM-dd");
+            startX = (int) (((mColumnWidth + verticalSpec) * index + MARGIN + STOREWIDTH) - textWidth / 2 + verticalSpec);
+            canvas.drawText(date, startX, marginTop + mHeight + textsize + verticalSpec, paint);
+
+            //绘制右侧日期
+            if (size != daysOfMonth) return;
+            //绘制右侧日期
+            String endDate = formatDate(list.get(list.size() - 1).getDate(), "yyyyMMdd", "yyyy-MM-dd");
+            int endStartX = (int) ((dateIndex + list.size() - 1) * (mColumnWidth + verticalSpec) + MARGIN + STOREWIDTH - textWidth + mColumnWidth);
+//            if (endStartX + textWidth > MARGIN + STOREWIDTH + mWidth) {
+//                endStartX = (int) (MARGIN + mWidth - textWidth);
+//            }
+            canvas.drawText(endDate, endStartX, marginTop + mHeight + textsize + verticalSpec, paint);
         }
     }
 

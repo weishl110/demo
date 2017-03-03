@@ -45,7 +45,7 @@ public abstract class BaseChartView extends View {
     protected int MARGIN = 11;
     protected int marginTop = 16;
     protected int MARGINBOTTOM = 16;
-    protected int VERTICALSPEC = 2;//柱状图间距
+    protected int verticalSpec = 2;//柱状图间距
 
     protected int block_size = 10;
 
@@ -96,11 +96,11 @@ public abstract class BaseChartView extends View {
 
         textsize = dp2px(textsize);
         dateTextSize = dp2px(dateTextSize);
-        VERTICALSPEC = dp2px(VERTICALSPEC);
+        verticalSpec = dp2px(verticalSpec);
         MARGINBOTTOM = dp2px(MARGINBOTTOM);
         MARGIN = dp2px(MARGIN);
         block_size = dp2px(block_size);
-        marginTop = textsize + VERTICALSPEC * 2;
+        marginTop = textsize + verticalSpec * 2;
         setBackgroundResource(android.R.color.white);
     }
 
@@ -228,7 +228,7 @@ public abstract class BaseChartView extends View {
         path.lineTo(mWidth + MARGIN, marginTop);
         path.lineTo(mWidth + MARGIN, mHeight + marginTop);
         path.lineTo(MARGIN, mHeight + marginTop);
-        path.lineTo(MARGIN, textsize + VERTICALSPEC * 2);
+        path.lineTo(MARGIN, textsize + verticalSpec * 2);
         path.close();
         canvas.drawPath(path, paint);
         path.reset();
@@ -251,7 +251,7 @@ public abstract class BaseChartView extends View {
         if (values == null || values.length == 0) return;
 
         for (int i = 0; i < values.length; i++) {
-            canvas.drawText(values[i], MARGIN + STOREWIDTH + VERTICALSPEC, marginTop - VERTICALSPEC + mAvarageLine * i, paint);
+            canvas.drawText(values[i], MARGIN + STOREWIDTH + verticalSpec, marginTop - verticalSpec + mAvarageLine * i, paint);
         }
         paint.reset();
     }
@@ -272,10 +272,10 @@ public abstract class BaseChartView extends View {
 
         paint.setColor(Color.parseColor(COLOR_BOTTOMDATEBG));
         int textLength = (int) paint.measureText(text);
-        int right = (int) (startX + textLength / 2 + VERTICALSPEC);
-        int left = (int) (startX - textLength / 2 - VERTICALSPEC);
+        int right = (int) (startX + textLength / 2 + verticalSpec);
+        int left = (int) (startX - textLength / 2 - verticalSpec);
 
-        int topSpec = VERTICALSPEC * 3;
+        int topSpec = verticalSpec * 2;
         if (left < MARGIN) {
             left = MARGIN;
             right = left + textLength + topSpec;
@@ -285,7 +285,8 @@ public abstract class BaseChartView extends View {
             left = right - textLength - topSpec;
         }
         //绘制日期的背景
-        Rect rect = new Rect(left, marginTop + mHeight + topSpec, right, marginTop + mHeight + textsize + topSpec * 2);
+        int top = marginTop + mHeight + verticalSpec;
+        Rect rect = new Rect(left, top, right, top + textsize + verticalSpec);
         canvas.drawRect(rect, paint);
 
         //绘制底部日期
@@ -294,7 +295,7 @@ public abstract class BaseChartView extends View {
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor(COLOR_BOTTOMDATE));
-        canvas.drawText(text, left + VERTICALSPEC, (float) (marginTop + mHeight + textsize + topSpec * 1.4), paint);
+        canvas.drawText(text, left + verticalSpec, (float) (marginTop + mHeight + textsize + verticalSpec), paint);
     }
 
     /**

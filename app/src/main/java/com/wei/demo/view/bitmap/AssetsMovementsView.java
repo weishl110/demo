@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointFLocal;
@@ -76,13 +75,13 @@ public class AssetsMovementsView extends BaseChartView {
 
         int tempLeft = mWidth / 2;
         int left = tempLeft + tempLeft / 7 + MARGIN;
-        int top = marginTop - textsize - VERTICALSPEC / 2;
+        int top = marginTop - textsize - verticalSpec / 2;
         int right = left + block_size;
         int bottom = top + block_size;
         Rect rect = new Rect(left, top, right, bottom);
         canvas.drawRect(rect, paint);
         paint.setColor(Color.parseColor(COLOR_LEFTTEXT));
-        canvas.drawText(texts[0], right + VERTICALSPEC * 2, bottom, paint);
+        canvas.drawText(texts[0], right + verticalSpec * 2, bottom, paint);
 
         //测量文案的宽度
         paint.setColor(Color.parseColor(COLOR_FF5A00));
@@ -92,7 +91,7 @@ public class AssetsMovementsView extends BaseChartView {
         rect = new Rect(left, top, right, bottom);
         canvas.drawRect(rect, paint);
         paint.setColor(Color.parseColor(COLOR_LEFTTEXT));
-        canvas.drawText(texts[1], right + VERTICALSPEC * 2, bottom, paint);
+        canvas.drawText(texts[1], right + verticalSpec * 2, bottom, paint);
 
     }
 
@@ -147,7 +146,7 @@ public class AssetsMovementsView extends BaseChartView {
             String endDate = formatDate(list.get(list.size() - 1).getDate(), "yyyyMMdd", "yyyy-MM-dd");
             float textWidth = textPaint.measureText(startDate);
             float textX = MARGIN + STOREWIDTH;
-            float y = marginTop + mHeight + VERTICALSPEC + textsize;
+            float y = marginTop + mHeight + verticalSpec + textsize;
             canvas.drawText(startDate, textX, y, textPaint);
             textX = MARGIN + STOREWIDTH + mWidth - textWidth;
             canvas.drawText(endDate, textX, y, textPaint);

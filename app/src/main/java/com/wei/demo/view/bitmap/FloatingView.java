@@ -3,7 +3,6 @@ package com.wei.demo.view.bitmap;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -12,7 +11,6 @@ import android.util.AttributeSet;
 import android.widget.Toast;
 
 import com.wei.demo.bean.ColumnBean;
-import com.wei.demo.bean.PointF;
 import com.wei.demo.bean.PointFLocal;
 
 import java.util.ArrayList;
@@ -125,7 +123,7 @@ public class FloatingView extends BaseChartView {
             String endDate = formatDate(list.get(list.size() - 1).getDate(), "yyyyMMdd", "yyyy-MM-dd");
             float textWidth = textPaint.measureText(startDate);
             float textX = MARGIN + STOREWIDTH;
-            float y = marginTop + mHeight + VERTICALSPEC + textsize;
+            float y = marginTop + mHeight + verticalSpec + textsize;
             canvas.drawText(startDate, textX, y, textPaint);
             textX = MARGIN + STOREWIDTH + mWidth - textWidth;
             canvas.drawText(endDate, textX, y, textPaint);
