@@ -1,6 +1,7 @@
 package com.wei.demo.recycleview;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +14,7 @@ import java.util.Collections;
 /**
  * Created by wei on 2016/10/9.
  */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> implements ICallBackSwopLocation{
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> implements ICallBackSwopLocation {
 
     private static final String TAG = "zpy_MyAdapter";
     private ArrayList<String> list;
@@ -24,8 +25,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> implemen
 
     @Override
     public MyAdapter.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.layout_item, null);
-
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_cardview, parent, false);
 //        MyHolder myHolder = new MyHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item, parent,false));
         return new MyHolder(view);
     }
@@ -42,8 +42,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> implemen
 
     @Override
     public void onMoveItem(int srcPosition, int targetPosition) {
-        Collections.swap(list,srcPosition,targetPosition);
-        notifyItemMoved(srcPosition,targetPosition);
+        Collections.swap(list, srcPosition, targetPosition);
+        notifyItemMoved(srcPosition, targetPosition);
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
@@ -51,7 +51,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> implemen
 
         public MyHolder(View itemView) {
             super(itemView);
-            tv = (TextView) itemView.findViewById(R.id.tv);
+            tv = (TextView) itemView.findViewById(R.id.tv_item);
         }
     }
 }

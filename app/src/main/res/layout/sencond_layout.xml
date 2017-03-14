@@ -7,13 +7,43 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv2"
+        android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_bright"
-        android:text="sencond"
+        android:text="启动服务"
         android:textColor="@android:color/black"
         android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright"
+        android:text="停止服务"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/black"
+        android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/bind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright"
+        android:layout_marginTop="10dp"
+        android:text="绑定服务"
+        android:textColor="@android:color/black"
+        android:textSize="35sp" />
+    <TextView
+        android:id="@+id/unbind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright"
+        android:text="解绑服务"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/black"
+        android:textSize="35sp" />
+
 
     <FrameLayout
         android:layout_width="match_parent"

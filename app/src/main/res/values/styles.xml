@@ -13,4 +13,31 @@
         <item name="android:textColor">@android:color/black</item>
 
     </style>
+
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="filtrateDialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <!--是否浮在activity上-->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 是否有title -->
+        <item name="android:background">@android:color/transparent</item>
+        <!--dialog背景 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 不设置背景不是半透明的 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 底部弹出动画 -->
+        <item name="android:windowAnimationStyle">@style/inputAnimationStyle</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <!-- 使用输入法动画在底部弹出 -->
+    <style name="inputAnimationStyle" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/input_method_enter</item>
+        <item name="android:windowExitAnimation">@anim/input_method_exit</item>
+    </style>
 </resources>

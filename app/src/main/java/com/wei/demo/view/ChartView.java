@@ -1,7 +1,6 @@
 package com.wei.demo.view;
 
 import android.content.Context;
-import android.drm.DrmStore;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -10,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -19,8 +17,7 @@ import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import com.wei.demo.bean.ColumnBean;
-import com.wei.demo.ColumnLocation;
-import com.wei.demo.bean.PointF;
+import com.wei.demo.bean.ColumnLocation;
 import com.wei.demo.bean.PointFLocal;
 
 import java.text.DecimalFormat;

@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.wei.demo.R;
+
 import java.util.ArrayList;
 
 /**
@@ -20,7 +22,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), android.R.layout.simple_list_item_1, null);
+        View view = View.inflate(parent.getContext(), R.layout.layout_item_cardview, null);
         return new MyViewHolder(view);
     }
 
@@ -38,7 +40,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         private TextView tv;
         public MyViewHolder(View itemView) {
             super(itemView);
-            tv = (TextView) itemView.findViewById(android.R.id.text1);
+            tv = (TextView) itemView.findViewById(R.id.tv_item);
         }
     }
 }

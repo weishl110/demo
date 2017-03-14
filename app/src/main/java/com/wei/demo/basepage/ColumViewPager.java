@@ -12,8 +12,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.wei.demo.R;
+import com.wei.demo.bean.CircleValueBean;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.utils.StringUtil;
+import com.wei.demo.view.CircleView;
 import com.wei.demo.view.bitmap.AssetsMovementsView;
 import com.wei.demo.view.bitmap.ColumnView;
 import com.wei.demo.view.bitmap.FloatingView;
@@ -33,6 +35,7 @@ public class ColumViewPager extends BasePager {
     private ColumnView columnView;
     private FloatingView floatingview;
     private AssetsMovementsView assetsMovementsView;
+    private CircleView circleView;
 
     public ColumViewPager(Context context) {
         super(context);
@@ -44,6 +47,7 @@ public class ColumViewPager extends BasePager {
         btn_get = (TextView) view.findViewById(R.id.get);
         columnView = (ColumnView) view.findViewById(R.id.columview);
         floatingview = (FloatingView) view.findViewById(R.id.floatingview);
+        circleView = (CircleView) view.findViewById(R.id.one_circle_view);
         assetsMovementsView = (AssetsMovementsView) view.findViewById(R.id.assets_movementview);
         btn_get.setOnClickListener(this);
         btn_get.setOnClickListener(View -> {
@@ -97,6 +101,7 @@ public class ColumViewPager extends BasePager {
         columnView.setData(list);
         floatingview.setData(list);
         assetsMovementsView.setData(getAssetData());
+        circleView.setData(getCircleData());
     }
 
     @Override
@@ -193,6 +198,41 @@ public class ColumViewPager extends BasePager {
                 columnBean.setDate("201611" + (tempIndex += 1));
             }
             list.add(columnBean);
+        }
+        return list;
+    }
+
+    /**
+     * 饼图的数据
+     * @return
+     */
+    public ArrayList<CircleValueBean> getCircleData() {
+        ArrayList<CircleValueBean> list = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            float value = (float) (Math.random() * 100);
+            CircleValueBean bean = new CircleValueBean();
+            bean.setValue(value);
+            switch (i) {
+                case 0:
+                    bean.setName("Android");
+                    break;
+                case 1:
+                    bean.setName("iOS");
+                    break;
+                case 2:
+                    bean.setName("PHP");
+                    break;
+                case 3:
+                    bean.setName("Java");
+                    break;
+                case 4:
+                    bean.setName("python");
+                    break;
+                case 5:
+                    bean.setName("c++");
+                    break;
+            }
+            list.add(bean);
         }
         return list;
     }

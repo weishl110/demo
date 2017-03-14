@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="cehsi"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="18sp"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="确定"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="取消"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <com.weigan.loopview.LoopView
+        android:id="@+id/loop_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:awv_textsize="24"/>
 </LinearLayout>

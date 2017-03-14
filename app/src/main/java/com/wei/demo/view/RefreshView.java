@@ -2,12 +2,10 @@ package com.wei.demo.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -99,7 +97,7 @@ public class RefreshView extends FrameLayout {
      * 初始化ViewDragHelper
      */
     private void init() {
-        dragHelper = ViewDragHelper.create(this, 2.0f , new MyCallBack());
+        dragHelper = ViewDragHelper.create(this, 2.0f, new MyCallBack());
     }
 
     @Override
@@ -163,7 +161,6 @@ public class RefreshView extends FrameLayout {
                     if (childView instanceof ViewGroup) {
                         boolean typeConform = isTypeConform(childView, conform);
                         if (typeConform) {
-                            childViewTop = childView.getTop();//可滑动view的初始top值
                             return typeConform;
                         }
                         childType(childView);
@@ -181,12 +178,15 @@ public class RefreshView extends FrameLayout {
         if (view instanceof ListView) {
             type = true;
             listView = (ListView) view;
+            childViewTop = listView.getTop();
         } else if (view instanceof RecyclerView) {
             recyclerView = (RecyclerView) view;
             type = true;
+            childViewTop = recyclerView.getTop();
         } else if (view instanceof ScrollView) {
             scrollView = (ScrollView) view;
             type = true;
+            childViewTop = scrollView.getTop();
         }
         return type;
     }
@@ -211,6 +211,8 @@ public class RefreshView extends FrameLayout {
         }
     }
 
+    private static final String TAG = "RefreshView";
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
 
@@ -233,7 +235,7 @@ public class RefreshView extends FrameLayout {
         @Override
         public int getViewVerticalDragRange(View child) {
             //如果包含可滑动的view
-            if (isMoveChildView && downY > childViewTop) {
+            if (isMoveChildView) {
                 if (listView != null && listView.getAdapter() != null) {
                     View childView = listView.getChildAt(0);
                     if (listView.getAdapter().getCount() > 0 && childView != null && childView.getTop() < 0)

@@ -46,7 +46,6 @@ public class NewsPager extends BasePager {
         LinearLayoutManager manager = new LinearLayoutManager(weak.get(), LinearLayoutManager.VERTICAL, false);
 
         recycler_view.setLayoutManager(manager);
-
         recycler_view.addItemDecoration(new DividerItemDecoration(weak.get(), DividerItemDecoration.VERTICAL_LIST));
         MyAdapter adapter = new MyAdapter(list);
         recycler_view.setAdapter(adapter);
@@ -109,7 +108,7 @@ public class NewsPager extends BasePager {
     private void init() {
         list = new ArrayList<>();
         for (int i = 0; i < 35; i++) {
-            list.add("条目---hello----" + i);
+            list.add("条目---hello--------------" + i);
         }
     }
 }

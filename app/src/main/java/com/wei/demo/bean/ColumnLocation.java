@@ -1,4 +1,4 @@
-package com.wei.demo;
+package com.wei.demo.bean;
 
 /**
  * Created by Administrator on 2016/12/26.

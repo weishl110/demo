@@ -1,20 +1,15 @@
 package com.wei.demo.basepage;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.R;
-import com.wei.demo.view.OSPicker;
+import com.wei.demo.bean.ColumnBean;
+import com.wei.demo.factory.DialogFactory;
 import com.wei.demo.view.TimeSharingView;
-import com.weigan.loopview.LoopView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Administrator on 2017/1/1.
@@ -23,7 +18,6 @@ public class CurvesPager extends BasePager {
 
     private static final String TAG = "zpy_CurvesPager";
     private TimeSharingView timesharing_view;
-    private LoopView loopView;
 
     public CurvesPager(Context context) {
         super(context);
@@ -33,10 +27,8 @@ public class CurvesPager extends BasePager {
     public View initView() {
         View view = View.inflate(weak.get(), R.layout.layout_curvesview, null);
         timesharing_view = (TimeSharingView) view.findViewById(R.id.timesharing_view);
-        TextView tv_get = (TextView) view.findViewById(R.id.tv_get);
-        loopView = (LoopView) view.findViewById(R.id.loop_view);
-        tv_get.setOnClickListener(this);
-
+        view.findViewById(R.id.tv_get).setOnClickListener(this);
+        view.findViewById(R.id.tv_dialog).setOnClickListener(this);
         return view;
     }
 
@@ -47,20 +39,27 @@ public class CurvesPager extends BasePager {
         m = 25;
         ArrayList<ColumnBean> list = getData();
         timesharing_view.setData(list);
-
-        ArrayList<String> items = new ArrayList<String>();
-//        Collections.addAll(items, "鸡蛋炒饭","鸡排盖浇饭","西红柿鸡蛋汤","鱼香茄子盖饭","牛肉面","刀削面","干拌面","炒河粉");
-        for (int i = 0; i < 12; i++) {
-            items.add("2016年" + (i + 1) + "月");
-        }
-        loopView.setNotLoop();
-        loopView.setItems(items);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        initData();
+        switch (v.getId()) {
+            case R.id.tv_get:
+                initData();
+                break;
+            case R.id.tv_dialog:
+                ArrayList<String> items = new ArrayList<String>();
+                for (int i = 0; i < 12; i++) {
+                    items.add("2016年" + (i + 1) + "月");
+                }
+                if(DialogFactory.isShow()){
+                    DialogFactory.dismiss();
+                }
+                DialogFactory.createDialog(weak.get(),items,false);
+                DialogFactory.show();
+                break;
+        }
     }
 
     //创建假数据
@@ -90,9 +89,9 @@ public class CurvesPager extends BasePager {
             columnBean.setDate((h < 10 ? ("0" + h) : h) + ":" + mm);
             list.add(columnBean);
         }
-        for (int i = 0; i < list.size(); i++) {
-            Log.e(TAG, "getData: value = " + list.get(i).toString());
-        }
+//        for (int i = 0; i < list.size(); i++) {
+//            Log.e(TAG, "getData: value = " + list.get(i).toString());
+//        }
         return list;
 
     }
@@ -114,6 +113,7 @@ public class CurvesPager extends BasePager {
         int povit = arr[low];
 
         while (l < h) {
+            //从后往前排
             while (l < h && arr[h] >= povit)
                 h--;
             if (l < h) {

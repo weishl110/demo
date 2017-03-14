@@ -1,24 +1,20 @@
-package com.wei.demo;
+package com.wei.demo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.MemoryFile;
-import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.wei.demo.R;
 import com.wei.demo.adapter.MyListAdapter;
 import com.wei.demo.adapter.MyViewPagerAdapter;
 import com.wei.demo.anonation.ContentView;
@@ -31,6 +27,7 @@ import com.wei.demo.basepage.TestPager;
 import com.wei.demo.view.MyViewPager;
 
 import java.util.ArrayList;
+
 @ContentView(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
@@ -82,7 +79,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 drawerLayout.closeDrawers();
-                startActivity(new Intent(getApplicationContext(),SencondActivity.class));
+                switch (position) {
+                    case 0:
+                        startActivity(new Intent(getApplicationContext(),NewControlActivity.class));
+                        break;
+                    default:
+                        startActivity(new Intent(getApplicationContext(), SencondActivity.class));
+                        break;
+                }
             }
         });
     }

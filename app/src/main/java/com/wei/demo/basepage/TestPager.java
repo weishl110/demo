@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 public class TestPager extends BasePager {
 
-    private TextView tv;
+    private TextView tv, tv_get;
     private ListView lv;
     private RefreshView refresh_view;
     private ArrayList<String> list;
@@ -39,8 +38,10 @@ public class TestPager extends BasePager {
     public View initView() {
         View view = View.inflate(weak.get(), R.layout.layout_testpaer, null);
         tv = (TextView) view.findViewById(R.id.tv);
+        tv_get = (TextView) view.findViewById(R.id.tv_get);
         lv = (ListView) view.findViewById(R.id.list_view);
         tv.setOnClickListener(this);
+        tv_get.setOnClickListener(this);
 
         refresh_view = (RefreshView) view.findViewById(R.id.refresh_view);
         refresh_view.setOnRefreshListener(new RefreshView.OnRefreshListener() {
@@ -49,9 +50,9 @@ public class TestPager extends BasePager {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                      refresh_view.refreshFinish();
+                        refresh_view.refreshFinish();
                     }
-                },5000);
+                }, 5000);
             }
         });
         return view;
@@ -78,7 +79,7 @@ public class TestPager extends BasePager {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(weak.get(), "position = "+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(weak.get(), "position = " + position, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -90,6 +91,9 @@ public class TestPager extends BasePager {
             case R.id.tv:
                 refresh_view.refreshFinish();
                 break;
+            case R.id.tv_get:
+                break;
         }
     }
+
 }
