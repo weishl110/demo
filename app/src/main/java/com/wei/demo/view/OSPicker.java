@@ -1,23 +1,21 @@
 package com.wei.demo.view;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetrics;
 import android.os.Handler;
-import android.provider.ContactsContract.CommonDataKinds.Event;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * OSPicker View
@@ -179,7 +177,7 @@ public class OSPicker extends View{
 	}
 	
 	/**
-	 * Set The Options Data
+	 * Set The Options
 	 * @param data
 	 */
 	public void setData(List<String> data){

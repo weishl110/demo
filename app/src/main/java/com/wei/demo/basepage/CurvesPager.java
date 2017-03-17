@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.View;
 
 import com.wei.demo.R;
+import com.wei.demo.adapter.MyRecyclerAdapter;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.factory.DialogFactory;
+import com.wei.demo.view.BouncingMenu;
 import com.wei.demo.view.TimeSharingView;
 
 import java.text.DecimalFormat;
@@ -18,6 +20,7 @@ public class CurvesPager extends BasePager {
 
     private static final String TAG = "zpy_CurvesPager";
     private TimeSharingView timesharing_view;
+    private BouncingMenu bouncingMenu;
 
     public CurvesPager(Context context) {
         super(context);
@@ -29,6 +32,7 @@ public class CurvesPager extends BasePager {
         timesharing_view = (TimeSharingView) view.findViewById(R.id.timesharing_view);
         view.findViewById(R.id.tv_get).setOnClickListener(this);
         view.findViewById(R.id.tv_dialog).setOnClickListener(this);
+        view.findViewById(R.id.tv_jump).setOnClickListener(this);
         return view;
     }
 
@@ -53,11 +57,23 @@ public class CurvesPager extends BasePager {
                 for (int i = 0; i < 12; i++) {
                     items.add("2016年" + (i + 1) + "月");
                 }
-                if(DialogFactory.isShow()){
+                if (DialogFactory.isShow()) {
                     DialogFactory.dismiss();
                 }
-                DialogFactory.createDialog(weak.get(),items,false);
+                DialogFactory.createDialog(weak.get(), items, false);
                 DialogFactory.show();
+                break;
+            case R.id.tv_jump:
+                if (bouncingMenu != null && bouncingMenu.isShow()) {
+                    bouncingMenu.dismiss();
+                } else {
+                    ArrayList<String> list = new ArrayList<String>();
+                    for (int i = 0; i < 40; i++) {
+                        list.add("item=====" + i);
+                    }
+                    MyRecyclerAdapter adapter = new MyRecyclerAdapter(list);
+                    bouncingMenu = BouncingMenu.makeMenu(timesharing_view, R.layout.layout_ru_sweet, adapter).show();
+                }
                 break;
         }
     }

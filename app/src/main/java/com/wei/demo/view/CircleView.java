@@ -10,7 +10,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.wei.demo.bean.CircleBean;
 import com.wei.demo.bean.CircleValueBean;
@@ -77,9 +77,9 @@ public class CircleView extends View {
         //创建矩形
         rectF = new RectF();
 
-        animator = ObjectAnimator.ofFloat(this, "phase", mPhase, 0.5f, 1.0f);
-        animator.setDuration(1500);
-        animator.setInterpolator(new AccelerateInterpolator());
+        animator = ObjectAnimator.ofFloat(this, "phase", 0.0f, 1.0f);
+        animator.setDuration(1000);
+        animator.setInterpolator(new LinearInterpolator());
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

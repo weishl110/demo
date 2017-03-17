@@ -4,6 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/get"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/actionbar_background"
+        android:gravity="center"
+        android:text="获取数据"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,31 +24,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="#f4f4f4">
-
-            <TextView
-                android:id="@+id/get"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="12dp"
-                android:background="@color/actionbar_background"
-                android:gravity="center"
-                android:text="获取数据"
-                android:textColor="@android:color/black"
-                android:textSize="20sp" />
+            android:background="#f4f4f4"
+            android:orientation="vertical">
 
             <com.wei.demo.view.CircleView
                 android:id="@+id/one_circle_view"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
             <com.wei.demo.view.bitmap.ColumnView
                 android:id="@+id/columview"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/space_10"
-                android:layout_height="290dp" />
+                android:layout_height="290dp"
+                android:layout_marginTop="@dimen/space_10" />
 
 
             <com.wei.demo.view.bitmap.FloatingView

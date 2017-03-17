@@ -1,5 +1,6 @@
 package com.wei.demo.view.bitmap;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,7 +8,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.animation.LinearInterpolator;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointFLocal;
@@ -38,17 +39,35 @@ public class ColumnView extends BaseChartView {
     //正值的颜色
     private static final String REDCOLOR = "#88f80d0d";
     private String[] leftValues;
+    private float heightPercent;
+    private ObjectAnimator animator;
 
     public ColumnView(Context context) {
         super(context);
+        init();
     }
 
     public ColumnView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public ColumnView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        init();
+    }
+
+    private void init() {
+        animator = ObjectAnimator.ofFloat(this, "heightPercent", 0.0f, 1.0f);
+        animator.setDuration(1000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setRepeatCount(0);
+    }
+
+    public void setHeightPercent(float heightPercent) {
+        this.heightPercent = heightPercent;
+        postInvalidate();
     }
 
     @Override
@@ -144,10 +163,10 @@ public class ColumnView extends BaseChartView {
             //y点的结束点
             if (value < 0) {
                 paint.setColor(Color.parseColor(BLUECOLOR));
-                endY = centerLine + endY;
+//                endY = centerLine + endY;
             } else {
                 paint.setColor(Color.parseColor(REDCOLOR));
-                endY = centerLine - endY;
+//                endY = centerLine - endY;
             }
             endY = Float.parseFloat(formatValue(endY));
             int startX = ((int) (i * (mColumnWidth + verticalSpec) + MARGIN + STOREWIDTH) /*+ orange*/);
@@ -161,9 +180,15 @@ public class ColumnView extends BaseChartView {
 
                 Rect rect = new Rect();
                 rect.left = startX;
-                rect.top = value < 0 ? (int) centerLine : (int) endY;
                 rect.right = endX;
-                rect.bottom = value < 0 ? (int) endY : (int) centerLine;
+
+                if (value < 0) {
+                    rect.top = (int) centerLine;
+                    rect.bottom = (int) (centerLine + (endY * heightPercent));
+                } else {
+                    rect.bottom = (int) centerLine;
+                    rect.top = (int) (centerLine - (endY * heightPercent));
+                }
                 canvas.drawRect(rect, paint);
             }
         }
@@ -237,7 +262,8 @@ public class ColumnView extends BaseChartView {
         //计算左侧数值
         leftValues = calculateAvarage(list.get(maxValueIndex).getValue(), true);
         requestLayout();
-        postInvalidate();
+//        postInvalidate();
+        animator.start();//开启动画
     }
 
     /**

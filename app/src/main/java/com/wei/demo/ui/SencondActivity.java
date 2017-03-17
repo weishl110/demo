@@ -1,11 +1,8 @@
 package com.wei.demo.ui;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,7 +24,6 @@ public class SencondActivity extends Activity implements View.OnClickListener {
 
     private BouncingMenu bouncingMenu;
     private LinearLayout ll;
-    private MyConnection myConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +68,10 @@ public class SencondActivity extends Activity implements View.OnClickListener {
             intent = new Intent(getApplication(), MyService.class);
         switch (v.getId()) {
             case R.id.stop:
-                intent = new Intent(getApplication(), MyService.class);
-                stopService(intent);
                 break;
             case R.id.start:
-                intent = new Intent(getApplication(), MyService.class);
-                startService(intent);
+//                intent = new Intent(getApplication(), MyService.class);
+//                startService(intent);
 
                 Log.e(TAG, "onClick:  = " + (10 / 3.2));
                 Log.e(TAG, "onClick:  = " + (double) (10 / 3));
@@ -96,27 +90,9 @@ public class SencondActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.bind:
-                myConnection = new MyConnection();
-                bindService(intent, myConnection, BIND_AUTO_CREATE);
                 break;
             case R.id.unbind:
-                if (myConnection != null) {
-                    unbindService(myConnection);
-                }
                 break;
-        }
-    }
-
-
-    public static class MyConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.e(TAG, "onServiceConnected:  = ");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.e(TAG, "onServiceDisconnected:  = ");
         }
     }
 }

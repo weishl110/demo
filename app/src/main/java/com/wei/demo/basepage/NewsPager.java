@@ -42,9 +42,7 @@ public class NewsPager extends BasePager {
         init();
 
         RecyclerView recycler_view = (RecyclerView) view.findViewById(R.id.recycler_view);
-
         LinearLayoutManager manager = new LinearLayoutManager(weak.get(), LinearLayoutManager.VERTICAL, false);
-
         recycler_view.setLayoutManager(manager);
         recycler_view.addItemDecoration(new DividerItemDecoration(weak.get(), DividerItemDecoration.VERTICAL_LIST));
         MyAdapter adapter = new MyAdapter(list);

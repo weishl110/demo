@@ -11,14 +11,12 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.wei.demo.bean.ColumnBean;
-import com.wei.demo.bean.PointF;
+import com.wei.demo.bean.PointFLocal;
 import com.wei.demo.utils.StringUtil;
 
 import java.text.DecimalFormat;
@@ -39,7 +37,7 @@ public class TimeSharingView extends View {
     //线的颜色
     private final String COLOR_BLUE = "#429ae6";
     //背景渐变色
-    private final String COLOR_BLUE_ALPHA = "#33429ae6";
+    private final String COLOR_BLUE_ALPHA = "#00429ae6";
     //底部背景日期颜色
     private final String COLOR_BOTTOMDATEBG = "#88E2EBF9";
     //底部日期颜色
@@ -84,7 +82,7 @@ public class TimeSharingView extends View {
      */
     private double floatingValue = 0.02f;
 
-    private ArrayList<PointF> pointLists = new ArrayList<>();
+    private ArrayList<PointFLocal> pointLists = new ArrayList<>();
     private Path linePath, alphaPath;
     private long moringTime;
     private long midTime;
@@ -255,7 +253,6 @@ public class TimeSharingView extends View {
      */
     private void drawLine(Canvas canvas) {
         //计算点的位置
-        calcuatePoints();
         if (pointLists.size() > 0) {
 
             //绘制曲线
@@ -265,13 +262,12 @@ public class TimeSharingView extends View {
             canvas.drawPath(linePath, paint);
             paint.reset();
             //绘制背景
-            PointF pointF = pointLists.get(0);
+            PointFLocal pointF = pointLists.get(0);
             //设置渐变背景
             LinearGradient linearGradient = new LinearGradient(pointF.x, MARGINTOP, 0, MARGINTOP + mHeight,
                     Color.parseColor(COLOR_BLUE), Color.parseColor(COLOR_BLUE_ALPHA), Shader.TileMode.MIRROR);
             paint.setShader(linearGradient);
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.TRANSPARENT);
             paint.setStrokeWidth(0);
             paint.setAlpha(80);
             canvas.drawPath(alphaPath, paint);
@@ -286,18 +282,18 @@ public class TimeSharingView extends View {
             Paint paint = getDeshPathPaint();
             paint.setColor(Color.GRAY);
 
-            PointF startPoint = pointLists.get(0);
-            PointF endPoint = pointLists.get(pointLists.size() - 1);
+            PointFLocal startPoint = pointLists.get(0);
+            PointFLocal endPoint = pointLists.get(pointLists.size() - 1);
             int index = 0;
-            if (downX < startPoint.x) {
+            if (downX <= startPoint.x) {
                 index = 0;
-            } else if (downX > endPoint.x) {
+            } else if (downX >= endPoint.x) {
                 index = pointLists.size() - 1;
             } else {
                 index = search(downX, 0, pointLists.size() - 1);
             }
 //            if (index < 0) return;
-            PointF point = pointLists.get(index);
+            PointFLocal point = pointLists.get(index);
             //横线
             canvas.drawLine(leftSpac, point.y, MARGINLEFT + mWidth, point.y, paint);
             //竖线
@@ -367,9 +363,9 @@ public class TimeSharingView extends View {
         if (startIndex > endIndex) return -1;
 
         int midIndex = endIndex - startIndex;
-        PointF point = pointLists.get(midIndex);
+        PointFLocal point = pointLists.get(midIndex);
         //下一个点 上一个点
-        PointF nextPoint, prePoint;
+        PointFLocal nextPoint, prePoint;
         if (midIndex != pointLists.size() - 1) {
             nextPoint = pointLists.get(midIndex + 1);
         } else {
@@ -410,13 +406,13 @@ public class TimeSharingView extends View {
     private void calcuatePoints() {
         //计算点的位置 从左往右画
         float midY = (MARGINTOP + spacVertical * 4);//中间点Y轴的位置
-        pointLists.clear();
         linePath = new Path();
         alphaPath = new Path();
         int size = list.size();
+        pointLists.clear();
         for (int i = 0; i < size; i++) {
             ColumnBean columnBean = list.get(i);
-            PointF pointF = getPoint(midY, columnBean);
+            PointFLocal pointF = getPoint(midY, columnBean);
             pointLists.add(pointF);
             if (i == 0) {
                 linePath.moveTo(pointF.x, pointF.y);
@@ -429,7 +425,7 @@ public class TimeSharingView extends View {
                     alphaPath.lineTo(pointF.x, MARGINTOP + mHeight);
                     alphaPath.close();
                 } else if (i != list.size() - 1) {//或者是下一个点大于宽度时
-                    PointF point = getPoint(midY, list.get(i + 1));
+                    PointFLocal point = getPoint(midY, list.get(i + 1));
                     if (point.x > MARGINLEFT + mWidth) {
                         alphaPath.lineTo(pointF.x, MARGINTOP + mHeight);
                         alphaPath.close();
@@ -445,8 +441,8 @@ public class TimeSharingView extends View {
      * @param column
      * @return
      */
-    private PointF getPoint(float midY, ColumnBean column) {
-        PointF pointF = new PointF();
+    private PointFLocal getPoint(float midY, ColumnBean column) {
+        PointFLocal pointF = new PointFLocal();
         float startX = 0.0f;
         float startY = 0.0f;
         //根据时间计算X点
@@ -595,14 +591,14 @@ public class TimeSharingView extends View {
         this.list = list;
         int maxValueIndex = StringUtil.getMaxIndex(list, context, midValue);
         if (maxValueIndex == -1) {
-            Toast.makeText(context, "暂无数据", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "暂无数据", Toast.LENGTH_SHORT).show();
             return;
         }
         isSet = true;
         this.list = list;
         maxValue = list.get(maxValueIndex).getNetValue();
-        Log.e(TAG, "setData: maxValue  = " + maxValue);
         calcuateAvarage();
+        calcuatePoints();
         postInvalidate();
     }
 

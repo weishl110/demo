@@ -1,5 +1,6 @@
 package com.wei.demo.view.bitmap;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,17 +37,42 @@ public class FloatingView extends BaseChartView {
     private String[] leftValues;
     private ArrayList<PointFLocal> pointFs;
     private Path alphaPath;
+    private ObjectAnimator animator;
+    private float percent;
+    private ObjectAnimator objectAnimator;
 
     public FloatingView(Context context) {
         super(context);
+        init();
     }
 
     public FloatingView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public FloatingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    public void init() {
+        animator = ObjectAnimator.ofFloat(this, "percent", 0, 1);
+        animator.setDuration(1000);
+        animator.setRepeatCount(0);
+    }
+
+    float stopX, stopY;
+
+    public void setPointFs(PointFLocal pointF) {
+        stopX = pointF.x;
+        stopY = pointF.y;
+        postInvalidate();
+    }
+
+    public void setPercent(float percent) {
+        this.percent = percent;
+        postInvalidate();
     }
 
     @Override
@@ -57,6 +83,10 @@ public class FloatingView extends BaseChartView {
             mPointSpec = (float) (mWidth - STOREWIDTH) / (list.size() - 1);
             //计算点的位置
             pointFs = calculatePointLocal(list, list.get(getMaxValueIndex()).getValue());
+
+//            objectAnimator = ObjectAnimator.ofObject(this, "pointFs", new MyEvaltor(), pointFs.toArray());
+//            objectAnimator.setDuration(1000);
+//            objectAnimator.start();
         }
     }
 
@@ -72,26 +102,6 @@ public class FloatingView extends BaseChartView {
     @Override
     protected void drawLong(Canvas canvas) {
         drawLongBottomDateAndDeshLine(canvas, pointFs, list, longDownX, "yyyyMMdd", "yyyy-MM-dd");
-//        int size = pointFs.size();
-//        PointF centerPointF, prePointF, nextPointF;
-//        Paint textPaint = getTextPaint(COLOR_BOTTOMDATE, dateTextSize);
-//        for (int i = 0; i < size; i++) {
-//            centerPointF = pointFs.get(i);
-//            prePointF = pointFs.get(i == 0 ? 0 : i - 1);
-//            nextPointF = pointFs.get(i == size - 1 ? i : i + 1);
-//            float right = centerPointF.x + (nextPointF.x - centerPointF.x) / 2;
-//            float left = centerPointF.x - (centerPointF.x - prePointF.x) / 2;
-//            if (longDownX < right && longDownX > left) {
-//                // 绘制底部日期
-//                drawBottomText(canvas, textPaint, centerPointF.x, formatDate(list.get(i).getDate(), "yyyyMMdd", "yyyy-MM-dd"));
-//                //绘制虚线
-//                textPaint.setPathEffect(new DashPathEffect(new float[]{8, 8}, 0));
-//                textPaint.setColor(Color.parseColor(COLOR_DASHLINE));
-//                canvas.drawLine(centerPointF.x, marginTop, centerPointF.x, marginTop + mHeight, textPaint);
-//
-//            }
-//        }
-
     }
 
     @Override
@@ -99,12 +109,15 @@ public class FloatingView extends BaseChartView {
         Paint paint = getLinePaint();
         paint.setColor(Color.parseColor(LINECOLOR));
         paint.setStrokeWidth(STOREWIDTH);
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.STROKE);
         int size = pointFs.size();
+        float stopX, stopY;
         for (int i = 0; i < size - 1; i++) {
             PointFLocal pointF = pointFs.get(i);
             PointFLocal nextPointF = pointFs.get(i + 1);
-            canvas.drawLine(pointF.x, pointF.y, nextPointF.x, nextPointF.y, paint);
+            stopX = nextPointF.x /** percent*/;
+            stopY = nextPointF.y/** percent*/;
+            canvas.drawLine(pointF.x, pointF.y, stopX, stopY, paint);
         }
 
         //绘制渐变背景
@@ -161,6 +174,7 @@ public class FloatingView extends BaseChartView {
         leftValues = calculateAvarage(maxValue, true);
         requestLayout();
         postInvalidate();
+//        animator.start();
     }
 
 

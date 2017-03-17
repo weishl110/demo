@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_bright"
-        android:text="启动服务"
+        android:text="test"
         android:textColor="@android:color/black"
         android:textSize="35sp" />
 
@@ -19,41 +19,45 @@
         android:id="@+id/stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@android:color/holo_blue_bright"
         android:text="停止服务"
-        android:layout_marginTop="10dp"
         android:textColor="@android:color/black"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/bind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_bright"
         android:layout_marginTop="10dp"
+        android:background="@android:color/holo_blue_bright"
         android:text="绑定服务"
         android:textColor="@android:color/black"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/unbind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@android:color/holo_blue_bright"
         android:text="解绑服务"
-        android:layout_marginTop="10dp"
         android:textColor="@android:color/black"
-        android:textSize="35sp" />
+        android:textSize="35sp"
+        android:visibility="gone" />
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@android:color/holo_blue_bright">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher" />
     </FrameLayout>
-
 </LinearLayout>
