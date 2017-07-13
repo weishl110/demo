@@ -34,10 +34,10 @@ public class NewsPager extends BasePager {
         View view = View.inflate(weak.get(), R.layout.layout_newspager, null);
         TextView btn = (TextView) view.findViewById(R.id.btn);
         btn.setSelected(false);
-        btn.setOnClickListener(View -> {
-            initData();
-            btn.setSelected(!btn.isSelected());
-        });
+//        btn.setOnClickListener(View -> {
+//            initData();
+//            btn.setSelected(!btn.isSelected());
+//        });
 
         init();
 

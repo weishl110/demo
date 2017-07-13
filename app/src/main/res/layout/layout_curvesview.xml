@@ -55,7 +55,13 @@
         <com.wei.demo.view.TimeSharingView
             android:id="@+id/timesharing_view"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             android:visibility="visible" />
+
+        <com.wei.demo.view.WaveView
+            android:id="@+id/waveview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 </RelativeLayout>
