@@ -50,9 +50,9 @@ public class ColumViewPager extends BasePager {
         circleView = (CircleView) view.findViewById(R.id.one_circle_view);
         assetsMovementsView = (AssetsMovementsView) view.findViewById(R.id.assets_movementview);
         btn_get.setOnClickListener(this);
-        btn_get.setOnClickListener(View -> {
-            initData();
-        });
+//        btn_get.setOnClickListener(View -> {
+//            initData();
+//        });
 
 
         return view;

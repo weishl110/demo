@@ -34,6 +34,7 @@
         <activity
             android:name=".ui.NewControlActivity"
             android:theme="@style/NoActionBar" />
+        <activity android:name=".KotlinActivity"></activity>
     </application>
 
 </manifest>

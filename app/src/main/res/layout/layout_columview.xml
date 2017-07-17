@@ -9,7 +9,6 @@
         android:id="@+id/get"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="12dp"
         android:background="@color/actionbar_background"
         android:gravity="center"
         android:text="获取数据"

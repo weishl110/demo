@@ -384,7 +384,7 @@ public class RefreshView extends FrameLayout {
         isStop = false;
         duration = 500L;
         isStartAnim = true;
-        RotateAnimation anim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
+        final RotateAnimation anim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5F, Animation.RELATIVE_TO_SELF, 0.5F);
         anim.setDuration(duration);
         anim.setRepeatCount(Animation.INFINITE);
         anim.setInterpolator(new LinearInterpolator());
