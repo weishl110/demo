@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_new_control"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.wei.demo.ui.NewControlActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/activity_new_control"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:orientation="vertical"
+                                                 tools:context="com.wei.demo.ui.NewControlActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarlayout"
@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/photo3" />
+                android:src="@mipmap/photo3"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -60,10 +60,25 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/new_viewpager"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.wei.demo.view.progress.CircleProgressView
+                android:id="@+id/progressview"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"/>
+
+            <com.wei.demo.view.ResultAnimation
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -75,5 +90,15 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="left|bottom"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"/>
 </android.support.design.widget.CoordinatorLayout>

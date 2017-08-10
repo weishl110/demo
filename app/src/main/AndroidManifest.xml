@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.wei.demo">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.wei.demo">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".MyApplication"
@@ -14,27 +19,32 @@
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.SencondActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"/>
 
         <service
             android:name=".service.MyService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.wei.service" />
+                <action android:name="com.wei.service"/>
             </intent-filter>
         </service>
 
         <activity
             android:name=".ui.NewControlActivity"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".KotlinActivity"></activity>
+            android:theme="@style/NoActionBar"/>
+        <activity
+            android:name="com.yanzhenjie.album.AlbumActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="图库"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
     </application>
 
 </manifest>

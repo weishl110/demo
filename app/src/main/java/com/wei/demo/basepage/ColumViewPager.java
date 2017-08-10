@@ -110,6 +110,7 @@ public class ColumViewPager extends BasePager {
         switch (v.getId()) {
             case R.id.get:
                 initData();
+
 //                String text = "10432.42%";
 //                SpannableString spannableString = setTextColorAndSize(text, Color.RED, 10, text.indexOf("%"), text.length(), true);
 //                Log.e(TAG, "initData: spannable = " + spannableString);
@@ -204,6 +205,7 @@ public class ColumViewPager extends BasePager {
 
     /**
      * 饼图的数据
+     *
      * @return
      */
     public ArrayList<CircleValueBean> getCircleData() {

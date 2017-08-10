@@ -17,6 +17,8 @@ import android.view.animation.LinearInterpolator;
 
 import com.wei.demo.R;
 
+import java.util.HashMap;
+
 /**
  * Created by ${wei} on 2017/7/9.
  */

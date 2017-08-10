@@ -21,7 +21,7 @@ public class CircleProgressView extends View {
     private String progressColor = "#F4F4F4";
     private String centerColor = "#336666";
     private String textColor = "#efefef";
-    private int progressColor_value, secondColor_value;
+//    private int progressColor_value, secondColor_value;
     private Paint mPaint;
     private float centerY, centerX;
     private float mRadius;
@@ -32,7 +32,7 @@ public class CircleProgressView extends View {
     private Context context;
     private boolean isSet;
 
-    private float textsize = 15.0f;
+    private float textsize = 10.0f;
     private Paint mTextPaint;
 
     public CircleProgressView(Context context) {
@@ -56,6 +56,7 @@ public class CircleProgressView extends View {
         nomalPadding = dp2px(nomalPadding);
 
         mPaint = new Paint();
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setAntiAlias(true);
 
         //中间文字画笔
@@ -80,8 +81,8 @@ public class CircleProgressView extends View {
         mRadius = (minValue - paintWidth / 2) / 2;
 
         //根据宽高计算中间textsize
-        textsize = minValue / 9;
-        textsize = dp2px(textsize);
+        textsize = minValue / 5;
+//        textsize = dp2px(textsize);
         mTextPaint.setTextSize(textsize);
 
         //第二进度矩阵
@@ -109,6 +110,8 @@ public class CircleProgressView extends View {
         //绘制第二进度
         mPaint.setColor(Color.parseColor(secondColor));
         mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
         canvas.drawArc(rectF, 270.0f, sweepAngle, false, mPaint);
 
         //绘制中心的文字
@@ -124,8 +127,6 @@ public class CircleProgressView extends View {
 //            sweepAngle += 0.5f;
 //            invalidate();
 //        }
-
-        Path path = new Path();
     }
 
     /**

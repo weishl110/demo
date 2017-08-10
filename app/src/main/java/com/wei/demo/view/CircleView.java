@@ -69,6 +69,8 @@ public class CircleView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setTextAlign(Paint.Align.RIGHT);
 
         margin = dp2px(margin);
@@ -140,8 +142,6 @@ public class CircleView extends View {
             int color = Color.parseColor(circleBean.getColor());
             mPaint.setColor(color);
             drawArc(canvas, rectF, startAngle, sweepAngle, false, mPaint);
-
-
             //根据角度获取圆的坐标点，并连接线
 //            CircleBean circleBean = arcList.get(i);
             double angleValue = (startAngle + sweepAngle) * Math.PI / 180;

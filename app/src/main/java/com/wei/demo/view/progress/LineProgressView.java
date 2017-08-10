@@ -51,11 +51,14 @@ public class LineProgressView extends View {
         mNomalPaint = new Paint();
         mNomalPaint.setAntiAlias(true);
         mNomalPaint.setColor(Color.parseColor(COLOR_GRAY));
+        mNomalPaint.setStrokeJoin(Paint.Join.ROUND);
+        mNomalPaint.setStrokeCap(Paint.Cap.ROUND);
 
         mProgressPaint = new Paint();
         mProgressPaint.setAntiAlias(true);
         mProgressPaint.setColor(Color.parseColor(COLOR_BLUE));
-
+        mProgressPaint.setStrokeJoin(Paint.Join.ROUND);
+        mProgressPaint.setStrokeCap(Paint.Cap.ROUND);
         mRadius = dp2px(mRadius);
     }
 
