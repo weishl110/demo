@@ -3,6 +3,7 @@ package com.wei.demo.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
@@ -552,6 +553,7 @@ public class TimeSharingView extends View {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
+        paint.setPathEffect(new CornerPathEffect(14));
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(1.5f);
         paint.setStyle(Paint.Style.STROKE);

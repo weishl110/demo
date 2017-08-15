@@ -4,13 +4,16 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.wei.demo.MyEvaltor;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointFLocal;
 
@@ -18,9 +21,11 @@ import java.util.ArrayList;
 
 /**
  * Created by ${wei} on 2017/2/16.
+ * 折线图
  */
 
 public class FloatingView extends BaseChartView {
+    private static final String TAG = "debug_FloatingView";
     //默认线的颜色
     private static final String LINECOLOR = "#99ff5a00";
     //背景颜色
@@ -37,8 +42,6 @@ public class FloatingView extends BaseChartView {
     private String[] leftValues;
     private ArrayList<PointFLocal> pointFs;
     private Path alphaPath;
-    private ObjectAnimator animator;
-    private float percent;
     private ObjectAnimator objectAnimator;
 
     public FloatingView(Context context) {
@@ -57,21 +60,15 @@ public class FloatingView extends BaseChartView {
     }
 
     public void init() {
-        animator = ObjectAnimator.ofFloat(this, "percent", 0, 1);
-        animator.setDuration(1000);
-        animator.setRepeatCount(0);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
     }
 
-    float stopX, stopY;
+    private float stopX, stopY;
 
     public void setPointFs(PointFLocal pointF) {
         stopX = pointF.x;
         stopY = pointF.y;
-        postInvalidate();
-    }
-
-    public void setPercent(float percent) {
-        this.percent = percent;
+        resetAlphaPath(list, list.get(getMaxValueIndex()).getValue());//重新
         postInvalidate();
     }
 
@@ -84,9 +81,9 @@ public class FloatingView extends BaseChartView {
             //计算点的位置
             pointFs = calculatePointLocal(list, list.get(getMaxValueIndex()).getValue());
 
-//            objectAnimator = ObjectAnimator.ofObject(this, "pointFs", new MyEvaltor(), pointFs.toArray());
-//            objectAnimator.setDuration(1000);
-//            objectAnimator.start();
+            objectAnimator = ObjectAnimator.ofObject(this, "pointFs", new MyEvaltor(), pointFs.toArray());
+            objectAnimator.setDuration(1500);
+            objectAnimator.start();
         }
     }
 
@@ -111,13 +108,18 @@ public class FloatingView extends BaseChartView {
         paint.setStrokeWidth(STOREWIDTH);
         paint.setStyle(Paint.Style.STROKE);
         int size = pointFs.size();
-        float stopX, stopY;
+//        float stopX, stopY;
         for (int i = 0; i < size - 1; i++) {
             PointFLocal pointF = pointFs.get(i);
             PointFLocal nextPointF = pointFs.get(i + 1);
-            stopX = nextPointF.x /** percent*/;
-            stopY = nextPointF.y/** percent*/;
-            canvas.drawLine(pointF.x, pointF.y, stopX, stopY, paint);
+//            stopX = nextPointF.x /** percent*/;
+//            stopY = nextPointF.y/** percent*/;
+            if (nextPointF.x > stopX) {
+                canvas.drawLine(pointF.x, pointF.y, stopX, stopY, paint);
+                break;
+            } else {
+                canvas.drawLine(pointF.x, pointF.y, nextPointF.x, nextPointF.y, paint);
+            }
         }
 
         //绘制渐变背景
@@ -150,6 +152,7 @@ public class FloatingView extends BaseChartView {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(STOREWIDTH);
+        paint.setPathEffect(new CornerPathEffect(10));
         paint.setAntiAlias(true);
         paint.setAlpha(0);
         paint.setColor(Color.parseColor(COLOR_BOX));
@@ -173,7 +176,7 @@ public class FloatingView extends BaseChartView {
         //计算左侧数值
         leftValues = calculateAvarage(maxValue, true);
         requestLayout();
-        postInvalidate();
+//        postInvalidate();
 //        animator.start();
     }
 
@@ -233,5 +236,28 @@ public class FloatingView extends BaseChartView {
         alphaPath.close();
 
         return pointFs;
+    }
+
+    private void resetAlphaPath(ArrayList<ColumnBean> list, float maxValue) {
+        int size = list.size();
+        alphaPath.reset();
+        alphaPath.moveTo(MARGIN + STOREWIDTH / 2, marginTop + mHeight);
+        for (int i = 0; i < size; i++) {
+            float value = list.get(i).getValue();
+            float percent = (Math.abs(maxValue) - value) / mAvarageValue;
+            float y = Math.abs(mAvarageLine * percent) + marginTop;
+            //左侧边距 + 线宽 + x * 间距
+            float x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
+            if (x > stopX) {
+                alphaPath.lineTo(stopX, y);
+                break;
+            } else {
+                alphaPath.lineTo(x, y);
+            }
+        }
+        //关闭path
+        alphaPath.lineTo(stopX, marginTop + mHeight);
+        alphaPath.close();
+
     }
 }

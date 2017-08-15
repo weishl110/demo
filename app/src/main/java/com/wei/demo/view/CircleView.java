@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 
 public class CircleView extends View {
 
-    private static final String TAG = "CircleView";
     private int mValue;
     //画笔的宽度
     private int mPaintWidth;
@@ -65,12 +65,12 @@ public class CircleView extends View {
 
     private void init() {
         setBackgroundResource(android.R.color.white);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
+//        mPaint.setStrokeJoin(Paint.Join.ROUND);
+//        mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setTextAlign(Paint.Align.RIGHT);
 
         margin = dp2px(margin);
@@ -123,8 +123,9 @@ public class CircleView extends View {
         rectF.top = (float) h / 2 - mRadius + getPaddingTop();
         rectF.right = rectF.left + mRadius * 2;
         rectF.bottom = rectF.top + mRadius * 2;
-
     }
+
+    RectF tempRectF = new RectF();
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -136,12 +137,21 @@ public class CircleView extends View {
         float startAngle = 0.0f, sweepAngle = 0.0f;
         for (int i = 0; i < size; i++) {
             mPaint.setStrokeWidth(mPaintWidth);
+//            mPaint.setStyle(Paint.Style.STROKE);
             CircleBean circleBean = arcList.get(i);
             startAngle = circleBean.getStartAngle() * mPhase;
             sweepAngle = circleBean.getSweepAngle() * mPhase;
             int color = Color.parseColor(circleBean.getColor());
             mPaint.setColor(color);
-            drawArc(canvas, rectF, startAngle, sweepAngle, false, mPaint);
+            if (i == 4) {
+                double angleValue = ((startAngle + sweepAngle / 2)) * Math.PI / 180;
+                float stopX = (float) (centerX + (30 * Math.cos(angleValue)));
+                float stopY = (float) (centerY + (30 * Math.sin(angleValue)));
+                tempRectF.set(stopX - mRadius, stopY - mRadius, stopX + mRadius, stopY + mRadius);
+                drawArc(canvas, tempRectF, startAngle, sweepAngle, false, mPaint);
+            } else {
+                drawArc(canvas, rectF, startAngle, sweepAngle, false, mPaint);
+            }
             //根据角度获取圆的坐标点，并连接线
 //            CircleBean circleBean = arcList.get(i);
             double angleValue = (startAngle + sweepAngle) * Math.PI / 180;
@@ -150,6 +160,9 @@ public class CircleView extends View {
             mPaint.setStrokeWidth(3);
             canvas.drawLine((float) centerX, (float) centerY, stopX, stopY, mPaint);
         }
+        mPaint.setColor(Color.WHITE);
+        mPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawCircle((float) centerX, (float) centerY, 30, mPaint);//绘制白色空心圆
         if (isAnimatorEnd) {
             RectF rectF1 = new RectF();
             float top = originalHeight / 2 - blockSize * 3 - verticalSrec * 2;
@@ -219,13 +232,13 @@ public class CircleView extends View {
         for (i = 0; i < size; i++) {
             CircleValueBean circleValueBean = list.get(i);
             float value = circleValueBean.getValue();
-            float angle = value * angleValue + 0.2f;
+            float angle = value * angleValue;
             CircleBean circleBean = new CircleBean();
             circleBean.setStartAngle(preAngle);
             circleBean.setSweepAngle(angle);
             circleBean.setColor(colors[i]);
             arcList.add(circleBean);
-            preAngle += angle - 0.1f;
+            preAngle += angle;
         }
     }
 

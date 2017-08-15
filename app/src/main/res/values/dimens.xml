@@ -134,6 +134,7 @@
     <dimen name="picker_dimen">270dip</dimen>
     <dimen name="minimum_margin_sides">48dip</dimen>
     <dimen name="minimum_margin_top_bottom">24dip</dimen>
+    <dimen name="value_dp32">32dp</dimen>
 
     <item name="circle_radius_multiplier" format="float" type="string">0.82</item>
     <item name="circle_radius_multiplier_24HourMode" format="float" type="string">0.85</item>

@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         startActivity(new Intent(getApplicationContext(),NewControlActivity.class));
                         break;
+                    case 1:
+                        startActivity(new Intent(getApplicationContext(),TestActivity.class));
+                        break;
                     default:
                         startActivity(new Intent(getApplicationContext(), SencondActivity.class));
                         break;

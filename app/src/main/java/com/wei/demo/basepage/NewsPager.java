@@ -1,6 +1,7 @@
 package com.wei.demo.basepage;
 
 import android.content.Context;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -9,10 +10,10 @@ import android.widget.TextView;
 
 import com.wei.demo.R;
 import com.wei.demo.bean.ColumnBean;
-import com.wei.demo.recycleview.DividerItemDecoration;
 import com.wei.demo.recycleview.MyAdapter;
 import com.wei.demo.recycleview.MyCalllBack;
 import com.wei.demo.utils.StringUtil;
+import com.yanzhenjie.album.widget.recyclerview.AlbumVerticalGirdDecoration;
 
 import java.util.ArrayList;
 
@@ -42,9 +43,9 @@ public class NewsPager extends BasePager {
         init();
 
         RecyclerView recycler_view = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recycler_view.addItemDecoration(new DividerItemDecoration(weak.get(),DividerItemDecoration.VERTICAL));
         LinearLayoutManager manager = new LinearLayoutManager(weak.get(), LinearLayoutManager.VERTICAL, false);
         recycler_view.setLayoutManager(manager);
-        recycler_view.addItemDecoration(new DividerItemDecoration(weak.get(), DividerItemDecoration.VERTICAL_LIST));
         MyAdapter adapter = new MyAdapter(list);
         recycler_view.setAdapter(adapter);
         MyCalllBack myCalllBack = new MyCalllBack(adapter);

@@ -39,7 +39,6 @@ public class SencondActivity extends Activity implements View.OnClickListener {
         unbind.setOnClickListener(this);
         bind.setOnClickListener(this);
         stop.setOnClickListener(this);
-
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.wei.demo.view.bitmap;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;

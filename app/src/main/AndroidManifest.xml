@@ -39,6 +39,7 @@
         <activity
             android:name=".ui.NewControlActivity"
             android:theme="@style/NoActionBar"/>
+        <activity android:name=".ui.TestActivity"/>
         <activity
             android:name="com.yanzhenjie.album.AlbumActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

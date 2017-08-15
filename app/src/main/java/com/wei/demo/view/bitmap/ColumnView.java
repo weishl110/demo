@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by ${wei} on 2017/2/16.
+ * 柱状图
  */
 
 public class ColumnView extends BaseChartView {
