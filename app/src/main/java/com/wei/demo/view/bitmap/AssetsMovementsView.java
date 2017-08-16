@@ -1,5 +1,6 @@
 package com.wei.demo.view.bitmap;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,9 +10,13 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointFLocal;
+import com.wei.demo.view.LineEvaltor;
 
 import java.util.ArrayList;
 
@@ -22,7 +27,7 @@ import java.util.ArrayList;
  */
 
 public class AssetsMovementsView extends BaseChartView {
-
+    private static final String TAG = "debug_AssetsMovementsView";
     private float mPointSpec;
     private ArrayList<ColumnBean> list;
     private String[] leftTexts;
@@ -41,18 +46,38 @@ public class AssetsMovementsView extends BaseChartView {
     private static final String COLOR_FF5A00 = "#ff5a00";
 
     private static final String[] texts = {"持有资产", "总资产"};
+    private ObjectAnimator animator;
 
 
     public AssetsMovementsView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public AssetsMovementsView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public AssetsMovementsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAnimation();
+    }
+
+    float percent = 0;
+
+    private void initAnimation() {
+        animator = ObjectAnimator.ofFloat(this, "percent", 0, 1);
+        animator.setDuration(2000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setRepeatCount(0);
+
+        totalAlphaPath = new Path();
+        hasAssetAlphaPath = new Path();
+    }
+
+    public void setPercent(float percent) {
+        this.percent = percent;
+        calculatePath(list);
+        postInvalidate();
     }
 
     @Override
@@ -110,10 +135,14 @@ public class AssetsMovementsView extends BaseChartView {
         Paint paint = getLinePaint();
         //绘制总资产
         paint.setColor(Color.parseColor("#ff5a00"));
+
+        float bottom = marginTop + mHeight;
         for (int i = 0; i < size - 1; i++) {
             currentPointF = mTotalPointFs.get(i);
             nextPointF = mTotalPointFs.get(i + 1);
-            canvas.drawLine(currentPointF.x, currentPointF.y, nextPointF.x, nextPointF.y, paint);
+            float tempCurrentY = bottom - currentPointF.y;
+            float tempnextY = bottom - nextPointF.y;
+            canvas.drawLine(currentPointF.x, bottom - tempCurrentY * percent, nextPointF.x, bottom - tempnextY * percent, paint);
         }
 
         //绘制持有资产
@@ -122,7 +151,9 @@ public class AssetsMovementsView extends BaseChartView {
         for (int i = 0; i < size; i++) {
             currentPointF = mHasAssetsPointFs.get(i);
             nextPointF = mHasAssetsPointFs.get(i + 1);
-            canvas.drawLine(currentPointF.x, currentPointF.y, nextPointF.x, nextPointF.y, paint);
+            float tempCurrentY = bottom - currentPointF.y;
+            float tempnextY = bottom - nextPointF.y;
+            canvas.drawLine(currentPointF.x, bottom - tempCurrentY * percent, nextPointF.x, bottom - tempnextY * percent, paint);
         }
         //绘制背景
 //        paint.setColorFilter(new PorterDuffColorFilter(0x66429ae6, PorterDuff.Mode.XOR));
@@ -172,7 +203,8 @@ public class AssetsMovementsView extends BaseChartView {
         maxValue = getMaxValueIndex(list);
         //计算左侧数值
         leftTexts = calculateLeftText(list, maxValue);
-        postInvalidate();
+//        postInvalidate();
+        animator.start();
     }
 
     /**
@@ -204,10 +236,11 @@ public class AssetsMovementsView extends BaseChartView {
         mHasAssetsPointFs.clear();
         mTotalPointFs.clear();
 
-        totalAlphaPath = new Path();
-        hasAssetAlphaPath = new Path();
-        totalAlphaPath.moveTo(MARGIN, marginTop + mHeight);
-        hasAssetAlphaPath.moveTo(MARGIN, marginTop + mHeight);
+        totalAlphaPath.reset();
+        hasAssetAlphaPath.reset();
+        float bottom = marginTop + mHeight;
+        totalAlphaPath.moveTo(MARGIN, bottom);
+        hasAssetAlphaPath.moveTo(MARGIN, bottom);
         for (int i = 0; i < size; i++) {
             PointFLocal pointF = new PointFLocal();
             ColumnBean columnBean = list.get(i);
@@ -216,19 +249,54 @@ public class AssetsMovementsView extends BaseChartView {
             pointF.y = (maxValue - columnBean.getHasValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2;
             mHasAssetsPointFs.add(pointF);
 
-            hasAssetAlphaPath.lineTo(pointF.x, pointF.y);
+//            hasAssetAlphaPath.lineTo(pointF.x, pointF.y);
             pointF = new PointFLocal();
             pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
             //总资产
             pointF.y = (maxValue - columnBean.getTotalValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2;
             mTotalPointFs.add(pointF);
-            totalAlphaPath.lineTo(pointF.x, pointF.y);
+
+//            totalAlphaPath.lineTo(pointF.x, pointF.y);
         }
-        float x = mHasAssetsPointFs.get(mHasAssetsPointFs.size() - 1).x;
-        totalAlphaPath.lineTo(x, marginTop + mHeight);
-        hasAssetAlphaPath.lineTo(x, marginTop + mHeight);
+//        float x = mHasAssetsPointFs.get(mHasAssetsPointFs.size() - 1).x;
+//        totalAlphaPath.lineTo(x, marginTop + mHeight);
+//        hasAssetAlphaPath.lineTo(x, marginTop + mHeight);
+//        totalAlphaPath.close();
+//        hasAssetAlphaPath.close();
+    }
+
+    private void calculatePath(ArrayList<ColumnBean> list) {
+        int size = list.size();
+        totalAlphaPath.reset();
+        hasAssetAlphaPath.reset();
+        float totalLastX = MARGIN + mWidth;
+        float hasAssetLastX = MARGIN + mWidth;
+
+        float bottom = marginTop + mHeight;
+        totalAlphaPath.moveTo(MARGIN, bottom);
+        hasAssetAlphaPath.moveTo(MARGIN, bottom);
+        for (int i = 0; i < size; i++) {
+            PointFLocal pointF = new PointFLocal();
+            ColumnBean columnBean = list.get(i);
+            //持有资产
+            pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
+            pointF.y = (bottom - ((maxValue - columnBean.getHasValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2)) * percent;
+            pointF.y = bottom - pointF.y;
+            totalLastX = pointF.x;
+
+            hasAssetAlphaPath.lineTo(pointF.x, pointF.y);
+            pointF = new PointFLocal();
+            pointF.x = i * mPointSpec + MARGIN + STOREWIDTH / 2;
+            //总资产
+            pointF.y = bottom - (bottom - ((maxValue - columnBean.getTotalValue()) / mAvarageValue * mAvarageLine + marginTop + STOREWIDTH / 2)) * percent;
+            totalAlphaPath.lineTo(pointF.x, pointF.y);
+            hasAssetLastX = pointF.x;
+        }
+        totalAlphaPath.lineTo(totalLastX, marginTop + mHeight);
+        hasAssetAlphaPath.lineTo(hasAssetLastX, marginTop + mHeight);
         totalAlphaPath.close();
         hasAssetAlphaPath.close();
+
     }
 
 

@@ -70,6 +70,7 @@ public abstract class BaseChartView extends View {
     protected GestureDetector mGestureDetector;
     protected float longDownX;
     private ScrollView mParentScrollView;
+    protected Paint mPaint = new Paint();
 
     public BaseChartView(Context context) {
         super(context);

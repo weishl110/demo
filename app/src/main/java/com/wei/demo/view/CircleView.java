@@ -135,7 +135,9 @@ public class CircleView extends View {
 
         int size = arcList.size();
         float startAngle = 0.0f, sweepAngle = 0.0f;
+        boolean userCenter = false;
         for (int i = 0; i < size; i++) {
+            mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(mPaintWidth);
 //            mPaint.setStyle(Paint.Style.STROKE);
             CircleBean circleBean = arcList.get(i);
@@ -148,9 +150,9 @@ public class CircleView extends View {
                 float stopX = (float) (centerX + (30 * Math.cos(angleValue)));
                 float stopY = (float) (centerY + (30 * Math.sin(angleValue)));
                 tempRectF.set(stopX - mRadius, stopY - mRadius, stopX + mRadius, stopY + mRadius);
-                drawArc(canvas, tempRectF, startAngle, sweepAngle, false, mPaint);
+                drawArc(canvas, tempRectF, startAngle, sweepAngle, userCenter, mPaint);
             } else {
-                drawArc(canvas, rectF, startAngle, sweepAngle, false, mPaint);
+                drawArc(canvas, rectF, startAngle, sweepAngle, userCenter, mPaint);
             }
             //根据角度获取圆的坐标点，并连接线
 //            CircleBean circleBean = arcList.get(i);

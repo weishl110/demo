@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  */
 public class TimeSharingView extends View {
 
-    private static final String TAG = "zpy_TimeSharingView";
+    private static final String TAG = "debug_TimeSharingView";
 
     //边框的颜色
     private final String COLOR_BOX = "#999999";

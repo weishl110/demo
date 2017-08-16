@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.wei.demo.MyEvaltor;
@@ -108,12 +107,9 @@ public class FloatingView extends BaseChartView {
         paint.setStrokeWidth(STOREWIDTH);
         paint.setStyle(Paint.Style.STROKE);
         int size = pointFs.size();
-//        float stopX, stopY;
         for (int i = 0; i < size - 1; i++) {
             PointFLocal pointF = pointFs.get(i);
             PointFLocal nextPointF = pointFs.get(i + 1);
-//            stopX = nextPointF.x /** percent*/;
-//            stopY = nextPointF.y/** percent*/;
             if (nextPointF.x > stopX) {
                 canvas.drawLine(pointF.x, pointF.y, stopX, stopY, paint);
                 break;
@@ -121,6 +117,7 @@ public class FloatingView extends BaseChartView {
                 canvas.drawLine(pointF.x, pointF.y, nextPointF.x, nextPointF.y, paint);
             }
         }
+
 
         //绘制渐变背景
         float x = pointFs.get(0).x;
@@ -149,14 +146,14 @@ public class FloatingView extends BaseChartView {
      * 虚线及边框的画笔
      */
     protected Paint getLinePaint() {
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(STOREWIDTH);
-        paint.setPathEffect(new CornerPathEffect(10));
-        paint.setAntiAlias(true);
-        paint.setAlpha(0);
-        paint.setColor(Color.parseColor(COLOR_BOX));
-        return paint;
+        mPaint.reset();
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(STOREWIDTH);
+        mPaint.setPathEffect(new CornerPathEffect(10));
+        mPaint.setAntiAlias(true);
+        mPaint.setAlpha(0);
+        mPaint.setColor(Color.parseColor(COLOR_BOX));
+        return mPaint;
     }
 
 
@@ -222,19 +219,17 @@ public class FloatingView extends BaseChartView {
             pointF.x = x;
             pointF.y = y;
             pointFs.add(pointF);
-
-            if (i == 0) {
-                alphaPath.moveTo(x, marginTop + mHeight);
-            }
-            alphaPath.lineTo(x, y);
+//            if (i == 0) {
+//                alphaPath.moveTo(x, marginTop + mHeight);
+//            }
+//            alphaPath.lineTo(x, y);
         }
 
-        int pointSize = pointFs.size();
+//        int pointSize = pointFs.size();
 
         //关闭path
-        alphaPath.lineTo(pointFs.get(pointSize - 1).x, marginTop + mHeight);
-        alphaPath.close();
-
+//        alphaPath.lineTo(pointFs.get(pointSize - 1).x, marginTop + mHeight);
+//        alphaPath.close();
         return pointFs;
     }
 
