@@ -1,10 +1,13 @@
 package com.wei.demo.ui;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +27,10 @@ import com.wei.demo.basepage.ColumViewPager;
 import com.wei.demo.basepage.CurvesPager;
 import com.wei.demo.basepage.NewsPager;
 import com.wei.demo.basepage.TestPager;
+import com.wei.demo.receiver.MyReceiver;
+import com.wei.demo.service.MyJobService;
+import com.wei.demo.service.RemoteService;
+import com.wei.demo.service.StickyLocaService;
 import com.wei.demo.view.MyViewPager;
 
 import java.util.ArrayList;
@@ -44,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
 //        setContentView(R.layout.activity_main);
         initView();
         setActionBar();
+
+//        startService(new Intent(this, StickyLocaService.class));
+//        startService(new Intent(this, RemoteService.class));
+//        startService(new Intent(this, MyJobService.class));
     }
 
     private void initView() {
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewpager = (MyViewPager) findViewById(R.id.viewpager);
         tablayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -81,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(getApplicationContext(),NewControlActivity.class));
+                        startActivity(new Intent(getApplicationContext(), NewControlActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(getApplicationContext(),TestActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TestActivity.class));
                         break;
                     default:
                         startActivity(new Intent(getApplicationContext(), SencondActivity.class));
@@ -94,11 +104,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     private void initTab() {
         tablayout.removeAllTabs();
         tablayout.addTab(tablayout.newTab().setText("柱状"));
         tablayout.addTab(tablayout.newTab().setText("分时"));
-        tablayout.addTab(tablayout.newTab().setText("杂货铺"));
+        tablayout.addTab(tablayout.newTab().setText("列表"));
         tablayout.addTab(tablayout.newTab().setText("刷新"));
     }
 
@@ -110,11 +125,6 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, 0, 0);
         drawerToggle.syncState();//同步actionbar和drawerlayout同步
         drawerLayout.setDrawerListener(drawerToggle);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

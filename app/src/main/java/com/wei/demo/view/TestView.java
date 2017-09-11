@@ -60,6 +60,5 @@ public class TestView extends View{
         path.moveTo(800,100);
         path.quadTo(50,300,100,100);
         canvas.drawPath(path,paint);
-
     }
 }

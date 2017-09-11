@@ -75,7 +75,6 @@ public class BouncingView extends View {
         mPath.lineTo(getWidth(), getHeight());
         mPath.lineTo(0, getHeight());
         mPath.close();
-
         canvas.drawPath(mPath, mPaint);
     }
 

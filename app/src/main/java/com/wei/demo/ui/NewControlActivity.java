@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.wei.demo.R;
+import com.wei.demo.bean.CircleBean;
 import com.wei.demo.view.progress.CircleProgressView;
 import com.yanzhenjie.album.Album;
 
@@ -81,7 +83,6 @@ public class NewControlActivity extends AppCompatActivity implements View.OnClic
                                 @Override
                                 public void run() {
                                     progressView.setData(value[0] += 0.02);
-                                    Log.e(TAG, "54行...run: value = " + value[0]);
                                 }
                             });
                         }
@@ -131,5 +132,20 @@ public class NewControlActivity extends AppCompatActivity implements View.OnClic
                 Log.e(TAG, "92行...onActivityResult:  = " + mDatas.get(i));
             }
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        test();
+
+    }
+
+    public void test() {
+        //获取应用程序APP显示区域的宽高
+        Rect rect = new Rect();
+
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        Log.e(TAG, "136行...test:  = " + rect.top + " ,,,height: " + rect.height() + "   bottom = " + rect.bottom + "  height : " + (rect.bottom - rect.top));
     }
 }

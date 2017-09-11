@@ -1,6 +1,7 @@
 package com.wei.demo.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.CornerPathEffect;
@@ -11,11 +12,17 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.provider.Settings;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.widget.Scroller;
+import android.widget.ZoomControls;
 
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointFLocal;
@@ -92,6 +99,13 @@ public class TimeSharingView extends View {
     private GestureDetector detector;
     private boolean isLongPress;
 
+
+    private VelocityTracker mVelocityTracker;
+    private int mMaxVelocity, mMinVelocity;
+    private int pointerId;
+    private Scroller mScroller;
+    private int downY;
+
     public TimeSharingView(Context context) {
         this(context, null);
     }
@@ -108,11 +122,17 @@ public class TimeSharingView extends View {
     private void init(Context context) {
         this.context = context;
         //去掉硬件加速
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
+        if (isHardwareAccelerated()) {
+            setLayerType(LAYER_TYPE_SOFTWARE, null);
+        }
         setBackgroundColor(Color.WHITE);
         leftTextSize = dp2px(leftTextSize);
         textSize = dp2px(textSize);
 
+        mScroller = new Scroller(context);
+        mVelocityTracker = VelocityTracker.obtain();
+        mMaxVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
+        mMinVelocity = ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
         detector = new GestureDetector(context, new MyGestureListener());
     }
 
@@ -136,25 +156,65 @@ public class TimeSharingView extends View {
 
     float downX = 0;
 
+
+    @Override
+    protected boolean awakenScrollBars(int startDelay) {
+        Log.e(TAG, "151行...awakenScrollBars:  = " + startDelay);
+        return super.awakenScrollBars(startDelay);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        mVelocityTracker.addMovement(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 downX = event.getX();
+                downY = (int) event.getY();
+                pointerId = event.getPointerId(0);
                 break;
             case MotionEvent.ACTION_MOVE:
+                mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
                 if (isLongPress) {
                     downX = event.getX();
                     postInvalidate();
+                } else {
+                    int diffX = (int) (event.getX() - downX);
+                    int diffY = (int) (event.getY() - downY);
+                    offsetLeftAndRight(diffX);
+                    offsetTopAndBottom(diffY);
+//                    scrollBy((int) -(diffX*0.1f),0);
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                float xVelocity = mVelocityTracker.getXVelocity(pointerId);
+                float yVelocity = mVelocityTracker.getYVelocity(pointerId);
+
+                Log.e(TAG, "160行...onTouchEvent:  = " + xVelocity + "   y :" + yVelocity + "  min : " + mMinVelocity + "   max : " + mMaxVelocity);
+                if (Math.abs(xVelocity) > mMinVelocity || Math.abs(yVelocity) > mMinVelocity) {
+//                    mScroller.fling(getScrollX(), getScrollY(), (int) -xVelocity,
+//                            (int) yVelocity, -1000, 1000, 0, 0);
+//                    invalidate();
+
+                }
+                mVelocityTracker.clear();
+                mVelocityTracker.recycle();
                 isLongPress = false;
                 postInvalidate();
                 break;
         }
         return detector.onTouchEvent(event);
+    }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if (mScroller.computeScrollOffset()) {
+            Log.e(TAG, "199行...computeScroll: currX = " + mScroller.getCurrX() + "   y : " + mScroller.getCurrY());
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            postInvalidate();
+        }
+
     }
 
     @Override

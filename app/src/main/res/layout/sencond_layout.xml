@@ -1,63 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/holo_orange_dark"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <TextView
-        android:id="@+id/start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_bright"
-        android:text="test"
-        android:textColor="@android:color/black"
-        android:textSize="35sp" />
+        style="@style/news_channel_sort_title"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="点击可切换位置，长按可拖动"
+        android:textColor="@color/color_dcdcdc"
+        android:textSize="12sp"/>
 
     <TextView
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/holo_blue_bright"
-        android:text="停止服务"
-        android:textColor="@android:color/black"
-        android:textSize="35sp"
-        android:visibility="gone" />
+        style="@style/news_channel_sort_title"
+        android:padding="8dp"
+        android:text="频道"/>
 
-    <TextView
-        android:id="@+id/bind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/holo_blue_bright"
-        android:text="绑定服务"
-        android:textColor="@android:color/black"
-        android:textSize="35sp"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/unbind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/holo_blue_bright"
-        android:text="解绑服务"
-        android:textColor="@android:color/black"
-        android:textSize="35sp"
-        android:visibility="gone" />
-
-
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_top"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/holo_blue_bright">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher" />
-    </FrameLayout>
+    <TextView
+        style="@style/news_channel_sort_title"
+        android:padding="8dp"
+        android:text="更多"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"/>
 </LinearLayout>

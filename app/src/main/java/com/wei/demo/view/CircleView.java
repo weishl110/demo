@@ -8,8 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -109,8 +111,8 @@ public class CircleView extends View {
         mPaint.setStrokeWidth(mPaintWidth);
         originalHeight = h;
 
-        mWidth = (int) (w - getPaddingLeft() - getPaddingRight() - mPaintWidth * 1.5f);
-        mHeight = (int) (h - getPaddingBottom() - getPaddingTop() - mPaintWidth * 1.5f);
+        mWidth = (int) (w - getPaddingLeft() - getPaddingRight() - mPaintWidth * 2f);
+        mHeight = (int) (h - getPaddingBottom() - getPaddingTop() - mPaintWidth * 2f);
         mRadius = (float) Math.min(mWidth, mHeight) / 2;
         //圆心
         mCircleCenter = mValue / 2;
@@ -119,7 +121,7 @@ public class CircleView extends View {
 
 
         //固定矩形的位置
-        rectF.left = (float) mWidth / 2 - mRadius + mPaintWidth * 1.5f / 2;
+        rectF.left = (float) mWidth / 2 - mRadius + mPaintWidth * 2f / 2;
         rectF.top = (float) h / 2 - mRadius + getPaddingTop();
         rectF.right = rectF.left + mRadius * 2;
         rectF.bottom = rectF.top + mRadius * 2;

@@ -12,8 +12,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-public class ResultAnimation extends View implements ValueAnimator.AnimatorUpdateListener {
-    private static final String TAG = "debug_ResultAnimation";
+import java.io.Serializable;
+
+public class ResultAnimation extends View implements
+        ValueAnimator.AnimatorUpdateListener{
+//    private static final String TAG = "debug_ResultAnimation";
     private Context mContext;
     private Paint mPaint;
     /**
@@ -80,14 +83,12 @@ public class ResultAnimation extends View implements ValueAnimator.AnimatorUpdat
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.e(TAG, "80行...onDraw:  = " + mRightPercent);
         if (mRightPercent == 1) {
-            Log.e(TAG, "onDraw: 一圈结束了");
 //            canvas.drawColor(Color.parseColor("#000000"));
 //            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-            mPathRight.reset();
-            mPathRightDst.reset();
-            mRightAnimator.start();
+//            mPathRight.reset();
+//            mPathRightDst.reset();
+//            mRightAnimator.start();
         }
         drawRight(canvas);
     }

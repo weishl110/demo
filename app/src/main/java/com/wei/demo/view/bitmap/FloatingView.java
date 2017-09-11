@@ -12,7 +12,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.widget.Toast;
 
-import com.wei.demo.MyEvaltor;
+import com.wei.demo.utils.MyEvaltor;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.bean.PointFLocal;
 

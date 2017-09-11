@@ -66,7 +66,7 @@ public class AssetsMovementsView extends BaseChartView {
 
     private void initAnimation() {
         animator = ObjectAnimator.ofFloat(this, "percent", 0, 1);
-        animator.setDuration(2000);
+        animator.setDuration(800);
         animator.setInterpolator(new LinearInterpolator());
         animator.setRepeatCount(0);
 

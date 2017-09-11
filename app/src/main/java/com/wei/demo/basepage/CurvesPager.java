@@ -1,24 +1,33 @@
 package com.wei.demo.basepage;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.wei.demo.R;
 import com.wei.demo.adapter.MyRecyclerAdapter;
 import com.wei.demo.bean.ColumnBean;
 import com.wei.demo.factory.DialogFactory;
+import com.wei.demo.service.MyAccessibiliService;
+import com.wei.demo.ui.SencondActivity;
+import com.wei.demo.ui.TestActivity;
 import com.wei.demo.view.BouncingMenu;
 import com.wei.demo.view.TimeSharingView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Administrator on 2017/1/1.
  */
 public class CurvesPager extends BasePager {
 
-    private static final String TAG = "zpy_CurvesPager";
+    private static final String TAG = "debug_CurvesPager";
     private TimeSharingView timesharing_view;
     private BouncingMenu bouncingMenu;
 
@@ -33,6 +42,7 @@ public class CurvesPager extends BasePager {
         view.findViewById(R.id.tv_get).setOnClickListener(this);
         view.findViewById(R.id.tv_dialog).setOnClickListener(this);
         view.findViewById(R.id.tv_jump).setOnClickListener(this);
+        view.findViewById(R.id.tv_setting).setOnClickListener(this);
         return view;
     }
 
@@ -50,7 +60,14 @@ public class CurvesPager extends BasePager {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.tv_get:
-                initData();
+                Context context = weak.get();
+                Intent intent = new Intent();
+                intent.putExtra("className", TestActivity.class.getName());
+                intent.setClass(context, SencondActivity.class);
+                intent.putExtra("test", 1);
+                intent.putExtra("isStart", true);
+                context.startActivity(intent);
+//                initData();
                 break;
             case R.id.tv_dialog:
                 ArrayList<String> items = new ArrayList<String>();
@@ -75,7 +92,46 @@ public class CurvesPager extends BasePager {
                     bouncingMenu = BouncingMenu.makeMenu(timesharing_view, R.layout.layout_ru_sweet, adapter).show();
                 }
                 break;
+            case R.id.tv_setting:
+                weak.get().startService(new Intent(weak.get(), MyAccessibiliService.class));
+                boolean accessibilitySettingOn = isAccessibilitySettingOn(weak.get());
+                Log.e(TAG, "88行...onClick:  = " + accessibilitySettingOn);
+                if (!accessibilitySettingOn) {
+                    Intent in = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    weak.get().startActivity(in);
+                } else {
+                    Toast.makeText(weak.get(), "已经开启服务", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+    }
+
+    private boolean isAccessibilitySettingOn(Context context) {
+        int accessibilityEnable = 0;
+        String service = context.getPackageName() + "/" + MyAccessibiliService.class.getCanonicalName();
+        Log.e(TAG, "92行...isAccessibilitySettingOn: service = " + service);
+        try {
+            accessibilityEnable = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
+            Log.e(TAG, "96行...isAccessibilitySettingOn: accessibilityEnable = " + accessibilityEnable);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        TextUtils.SimpleStringSplitter mStringComlonSplitter = new TextUtils.SimpleStringSplitter(':');
+        if (accessibilityEnable == 1) {
+            String settingValue = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                mStringComlonSplitter.setString(settingValue);
+                while (mStringComlonSplitter.hasNext()) {
+                    String next = mStringComlonSplitter.next();
+                    Log.e(TAG, "109行...isAccessibilitySettingOn: next = " + next);
+                    if (next.equalsIgnoreCase(service)) {
+                        Log.e(TAG, "111行...isAccessibilitySettingOn: true = ");
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     //创建假数据

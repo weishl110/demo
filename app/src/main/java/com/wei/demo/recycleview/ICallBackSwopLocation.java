@@ -6,4 +6,6 @@ package com.wei.demo.recycleview;
 public interface ICallBackSwopLocation {
 
     void onMoveItem(int srcPosition, int targetPosition);
+
+    void onRemoveItem(int position);
 }

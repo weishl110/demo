@@ -2,12 +2,15 @@ package com.wei.demo.recycleview;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
+
+import java.security.PolicySpi;
 
 /**
  * Created by wei on 2016/10/9.
  */
 public class MyCalllBack extends ItemTouchHelper.Callback {
-
+    private static final String TAG = "debug_MyCalllBack";
     private ICallBackSwopLocation iCallBackSwopLocation;
 
     public MyCalllBack(ICallBackSwopLocation iCallBackSwopLocation) {
@@ -21,6 +24,7 @@ public class MyCalllBack extends ItemTouchHelper.Callback {
         int swipeFlags = ItemTouchHelper.LEFT;//左右滑动
         return makeMovementFlags(dragflags, swipeFlags);
     }
+
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         if (iCallBackSwopLocation != null) {
@@ -31,7 +35,10 @@ public class MyCalllBack extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
+        Log.e(TAG, "34行...onSwiped: direction = " + direction + "   " + viewHolder.getAdapterPosition());
+        if (iCallBackSwopLocation != null && direction == ItemTouchHelper.LEFT) {
+            iCallBackSwopLocation.onRemoveItem(viewHolder.getAdapterPosition());
+        }
     }
 
     @Override

@@ -37,7 +37,6 @@ public class BouncingMenu {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 //        recyclerView.setAdapter(adapter);
-
     }
 
     /**

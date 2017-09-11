@@ -1,44 +1,58 @@
 package com.wei.demo.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wei.demo.R;
+import com.wei.demo.adapter.ChannelAdapter;
 import com.wei.demo.adapter.MyRecyclerAdapter;
+import com.wei.demo.bean.ChannelTab;
+import com.wei.demo.listener.ItemDragHelperCallback;
 import com.wei.demo.service.MyService;
+import com.wei.demo.utils.ConstansValue;
 import com.wei.demo.view.BouncingMenu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ${wei} on 2017/2/9.
  */
 
 public class SencondActivity extends Activity implements View.OnClickListener {
-    private static final String TAG = "zpy_SencondActivity";
-
-    private BouncingMenu bouncingMenu;
-    private LinearLayout ll;
+    private static final String TAG = "debug_SencondActivity";
+    RecyclerView recyclerView_top;
+    RecyclerView recyclerView_bottom;
+    private ChannelAdapter bottomAdapter, topAdapter;
+    private List<ChannelTab> tabsTop, tabsBottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sencond_layout);
-        ll = (LinearLayout) findViewById(R.id.ll);
-        TextView start = (TextView) findViewById(R.id.start);
-        TextView unbind = (TextView) findViewById(R.id.unbind);
-        TextView bind = (TextView) findViewById(R.id.bind);
-        TextView stop = (TextView) findViewById(R.id.stop);
 
-        start.setOnClickListener(this);
-        unbind.setOnClickListener(this);
-        bind.setOnClickListener(this);
-        stop.setOnClickListener(this);
+        recyclerView_top = (RecyclerView) findViewById(R.id.recyclerview_top);
+        recyclerView_bottom = (RecyclerView) findViewById(R.id.recyclerview_bottom);
+        initDate();
     }
 
     @Override
@@ -59,39 +73,64 @@ public class SencondActivity extends Activity implements View.OnClickListener {
         Log.e(TAG, "onRestoreInstanceState: " + (savedInstanceState == null));
     }
 
-    Intent intent;
-
     @Override
     public void onClick(View v) {
-        if (intent == null)
-            intent = new Intent(getApplication(), MyService.class);
-        switch (v.getId()) {
-            case R.id.stop:
-                break;
-            case R.id.start:
-//                intent = new Intent(getApplication(), MyService.class);
-//                startService(intent);
 
-                Log.e(TAG, "onClick:  = " + (10 / 3.2));
-                Log.e(TAG, "onClick:  = " + (double) (10 / 3));
-                Log.e(TAG, "onClick:  = " + ((double) 10 / 3));
+    }
 
-                if (bouncingMenu != null && bouncingMenu.isShow()) {
-                    bouncingMenu.dismiss();
-                } else {
-                    ArrayList<String> list = new ArrayList<String>();
-                    for (int i = 0; i < 40; i++) {
-                        list.add("item=====" + i);
-                    }
-                    MyRecyclerAdapter adapter = new MyRecyclerAdapter(list);
-                    bouncingMenu = BouncingMenu.makeMenu(ll, R.layout.layout_ru_sweet, adapter).show();
-                }
-                break;
+    protected void initDate() {
+        tabsTop = toList(ConstansValue.json2);
+        tabsBottom = toList(ConstansValue.json);
 
-            case R.id.bind:
-                break;
-            case R.id.unbind:
-                break;
-        }
+        topAdapter = new ChannelAdapter(this, R.layout.layout_item_news, tabsTop);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false);
+        recyclerView_top.setItemAnimator(new DefaultItemAnimator());
+        recyclerView_top.setLayoutManager(layoutManager);
+        recyclerView_top.setAdapter(topAdapter);
+
+        bottomAdapter = new ChannelAdapter(this, R.layout.layout_item_news, tabsBottom);
+        recyclerView_bottom.setItemAnimator(new DefaultItemAnimator());
+        layoutManager = new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false);
+        recyclerView_bottom.setLayoutManager(layoutManager);
+        recyclerView_bottom.setAdapter(bottomAdapter);
+
+        topAdapter.setOnItemClickListener(new ChannelAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ChannelTab channelTab = tabsTop.get(position);
+                bottomAdapter.add(channelTab);
+                topAdapter.removeAt(position);
+                topAdapter.notifyDataSetChanged();
+                bottomAdapter.notifyDataSetChanged();
+            }
+        });
+
+        bottomAdapter.setOnItemClickListener(new ChannelAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ChannelTab channelTab = tabsBottom.get(position);
+                topAdapter.add(channelTab);
+                bottomAdapter.removeAt(position);
+                topAdapter.notifyDataSetChanged();
+                bottomAdapter.notifyDataSetChanged();
+            }
+        });
+
+        ItemDragHelperCallback topDragHelper = new ItemDragHelperCallback(topAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(topDragHelper);
+        itemTouchHelper.attachToRecyclerView(recyclerView_top);
+        topAdapter.setItemDragHelperCallback(topDragHelper);
+
+        ItemDragHelperCallback bottomDragHelper = new ItemDragHelperCallback(bottomAdapter);
+        itemTouchHelper = new ItemTouchHelper(bottomDragHelper);
+        itemTouchHelper.attachToRecyclerView(recyclerView_bottom);
+        bottomAdapter.setItemDragHelperCallback(bottomDragHelper);
+    }
+
+    private <T> T toList(String json) {
+        Gson gson = new Gson();
+        List<ChannelTab> datas = gson.fromJson(json, new TypeToken<List<ChannelTab>>() {
+        }.getType());
+        return (T) datas;
     }
 }

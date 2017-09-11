@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme. Theme.AppCompat.Light.DarkActionBar-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -41,4 +41,18 @@
         <item name="android:windowEnterAnimation">@anim/input_method_enter</item>
         <item name="android:windowExitAnimation">@anim/input_method_exit</item>
     </style>
+
+    <style name="style_toolbar">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textColorPrimary">@color/color_white</item>
+    </style>
+
+    <style name="news_channel_sort_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_545454</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+    </style>
+
+    <dimen name="font_normal">20sp</dimen>
 </resources>

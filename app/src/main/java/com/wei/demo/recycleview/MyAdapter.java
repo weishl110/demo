@@ -47,6 +47,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> implemen
         notifyItemMoved(srcPosition, targetPosition);
     }
 
+    @Override
+    public void onRemoveItem(int position) {
+        list.remove(position);
+        notifyDataSetChanged();
+    }
+
     class MyHolder extends RecyclerView.ViewHolder {
         TextView tv;
 

@@ -1,4 +1,4 @@
-package com.wei.demo;
+package com.wei.demo.utils;
 
 import android.animation.TypeEvaluator;
 import android.util.Log;
