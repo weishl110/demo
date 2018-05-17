@@ -1,17 +1,13 @@
 package com.wei.demo.ui;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,10 +23,6 @@ import com.wei.demo.basepage.ColumViewPager;
 import com.wei.demo.basepage.CurvesPager;
 import com.wei.demo.basepage.NewsPager;
 import com.wei.demo.basepage.TestPager;
-import com.wei.demo.receiver.MyReceiver;
-import com.wei.demo.service.MyJobService;
-import com.wei.demo.service.RemoteService;
-import com.wei.demo.service.StickyLocaService;
 import com.wei.demo.view.MyViewPager;
 
 import java.util.ArrayList;

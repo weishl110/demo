@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait">
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -33,12 +33,12 @@
             android:name=".ui.SencondActivity"
             android:launchMode="singleTask">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN"/> -->
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN"/>-->
 
 
-            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
-            <!-- </intent-filter> -->
+             <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+             <!--</intent-filter>-->
         </activity>
 
         <service
@@ -72,12 +72,12 @@
             android:exported="true"
             android:process=":remote">
         </service>
-        <service
-            android:name=".service.MyJobService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:process=":job"/>
+        <!--<service-->
+            <!--android:name=".service.MyJobService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true"-->
+            <!--android:permission="android.permission.BIND_JOB_SERVICE"-->
+            <!--android:process=":job"/>-->
         <service
             android:name=".service.CancelService"
             android:exported="true">

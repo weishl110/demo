@@ -2,6 +2,7 @@ package com.wei.demo.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,15 @@ import android.view.View;
 import com.wei.demo.R;
 import com.wei.demo.adapter.MyRecyclerAdapter;
 import com.wei.demo.recycleview.StickySectionDecoration;
+import com.wei.demo.view.RefreshLayout;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by ${wei} on 2017/8/11.
@@ -29,6 +37,8 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
         int test = getIntent().getIntExtra("test", -1);
         Log.e(TAG, "30行...onCreate: test = " + test);
+
+        final RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshlayout);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -47,6 +57,22 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
                 return list.get(position).substring(0, 1).toUpperCase();
             }
         }));
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Observable.timer(2000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
+                                refreshLayout.setRefreshing(false);
+                                android.util.Log.e(TAG, "timer - accept:  = ");
+                            }
+                        });
+            }
+        });
 
     }
 

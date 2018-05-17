@@ -1,13 +1,7 @@
 package com.wei.demo.ui;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,23 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wei.demo.R;
 import com.wei.demo.adapter.ChannelAdapter;
-import com.wei.demo.adapter.MyRecyclerAdapter;
 import com.wei.demo.bean.ChannelTab;
 import com.wei.demo.listener.ItemDragHelperCallback;
-import com.wei.demo.service.MyService;
 import com.wei.demo.utils.ConstansValue;
-import com.wei.demo.view.BouncingMenu;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

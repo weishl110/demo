@@ -6,21 +6,27 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wei.demo.R;
 import com.wei.demo.adapter.MyRecyclerAdapter;
+import com.wei.demo.anim.MyAnimation;
 import com.wei.demo.bean.ColumnBean;
+import com.wei.demo.bean.TabItem;
 import com.wei.demo.factory.DialogFactory;
 import com.wei.demo.service.MyAccessibiliService;
 import com.wei.demo.ui.SencondActivity;
 import com.wei.demo.ui.TestActivity;
+import com.wei.demo.view.AutoTabLayout;
 import com.wei.demo.view.BouncingMenu;
 import com.wei.demo.view.TimeSharingView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/1/1.
@@ -30,6 +36,12 @@ public class CurvesPager extends BasePager {
     private static final String TAG = "debug_CurvesPager";
     private TimeSharingView timesharing_view;
     private BouncingMenu bouncingMenu;
+    private AutoTabLayout indicator;
+    private EditText edittext;
+    private List<TabItem> mTabItems;
+    private MyAdapter adapter;
+    private ImageView iv_anim;
+    private MyAnimation myAnimation;
 
     public CurvesPager(Context context) {
         super(context);
@@ -38,11 +50,15 @@ public class CurvesPager extends BasePager {
     @Override
     public View initView() {
         View view = View.inflate(weak.get(), R.layout.layout_curvesview, null);
+        edittext = (EditText) view.findViewById(R.id.edit_text);
+        view.findViewById(R.id.updata).setOnClickListener(this);
         timesharing_view = (TimeSharingView) view.findViewById(R.id.timesharing_view);
         view.findViewById(R.id.tv_get).setOnClickListener(this);
         view.findViewById(R.id.tv_dialog).setOnClickListener(this);
         view.findViewById(R.id.tv_jump).setOnClickListener(this);
         view.findViewById(R.id.tv_setting).setOnClickListener(this);
+        iv_anim = (ImageView) view.findViewById(R.id.iv_anim);
+        indicator = (AutoTabLayout) view.findViewById(R.id.indicatorview);
         return view;
     }
 
@@ -53,6 +69,60 @@ public class CurvesPager extends BasePager {
         m = 25;
         ArrayList<ColumnBean> list = getData();
         timesharing_view.setData(list);
+
+//        List<TabItem> itemList = initItems(3);
+//        indicator.setItems(itemList);
+        if (mTabItems == null) {
+            mTabItems = new ArrayList<>();
+        }
+        adapter = new MyAdapter(mTabItems);
+        indicator.setAdapter(adapter);
+
+        indicator.setOnItemClickListener(new AutoTabLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(AutoTabLayout.BaseAdapter adapter, int position, View view) {
+
+            }
+        });
+    }
+
+    private class MyAdapter implements AutoTabLayout.BaseAdapter {
+
+        private List<TabItem> list;
+
+        public MyAdapter(List<TabItem> list) {
+            this.list = list;
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        @Override
+        public View getItemView(int position, ViewGroup parent) {
+            View view = View.inflate(parent.getContext(), R.layout.layout_indicator, null);
+            ImageView iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
+            TextView tv_text = (TextView) view.findViewById(R.id.tv_text);
+            TextView tv_num = (TextView) view.findViewById(R.id.tv_num);
+            TabItem tabItem = list.get(position);
+            tv_text.setText(tabItem.text);
+            tv_num.setVisibility(View.GONE);
+            iv_icon.setImageResource(tabItem.imgRes);
+            return view;
+        }
+    }
+
+    private List<TabItem> initItems(int size) {
+        ArrayList<TabItem> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            TabItem tabItem = new TabItem();
+            tabItem.text = "dd-" + i;
+            tabItem.imgRes = R.mipmap.my_center;
+            tabItem.num = 10;
+            list.add(tabItem);
+        }
+        return list;
     }
 
     @Override
@@ -93,15 +163,40 @@ public class CurvesPager extends BasePager {
                 }
                 break;
             case R.id.tv_setting:
-                weak.get().startService(new Intent(weak.get(), MyAccessibiliService.class));
-                boolean accessibilitySettingOn = isAccessibilitySettingOn(weak.get());
-                Log.e(TAG, "88行...onClick:  = " + accessibilitySettingOn);
-                if (!accessibilitySettingOn) {
-                    Intent in = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    weak.get().startActivity(in);
-                } else {
-                    Toast.makeText(weak.get(), "已经开启服务", Toast.LENGTH_SHORT).show();
-                }
+//                iv_anim.setRotationX(180);
+                myAnimation = new MyAnimation(360);
+                myAnimation.setFillAfter(true);
+                iv_anim.startAnimation(myAnimation);
+//                ObjectAnimator.ofFloat(iv_anim, "rotationY", 0, 360).setDuration(1500).start();
+//                animator.setDuration(1500);
+//                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                    @Override
+//                    public void onAnimationUpdate(ValueAnimator animation) {
+//                        android.util.Log.e(TAG, "onAnimationUpdate: animatorValue = " + animation.getAnimatedValue());
+//                    }
+//                });
+//                animator.start();
+//                weak.get().startService(new Intent(weak.get(), MyAccessibiliService.class));
+//                boolean accessibilitySettingOn = isAccessibilitySettingOn(weak.get());
+//                Log.e(TAG, "88行...onClick:  = " + accessibilitySettingOn);
+//                if (!accessibilitySettingOn) {
+//                    Intent in = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//                    weak.get().startActivity(in);
+//                } else {
+//                    Toast.makeText(weak.get(), "已经开启服务", Toast.LENGTH_SHORT).show();
+//                }
+                break;
+            case R.id.updata:
+//                String text = edittext.getText().toString();
+//                android.util.Log.e(TAG, "onClick:  = " + (text.matches("[0-9]{1,}")));
+//                if (text.matches("[0-9]{1,}")) {
+//                    int num = Integer.parseInt(text);
+//                    List<TabItem> tabItems = initItems(num);
+//                    mTabItems.clear();
+//                    mTabItems.addAll(tabItems);
+//                    indicator.notifyAdapter();
+////                    indicator.setItems(tabItems);
+//                }
                 break;
         }
     }

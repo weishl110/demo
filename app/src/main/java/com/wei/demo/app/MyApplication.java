@@ -4,11 +4,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-
-import com.wei.demo.service.MyJobService;
-import com.wei.demo.service.StickyLocaService;
 
 import java.util.List;
 
@@ -26,7 +22,7 @@ public class MyApplication extends Application {
 //        getProcessName(this, android.os.Process.myPid());
 //        startService(new Intent(this,StickyLocaService.class));
 //        startService(new Intent(this, MyJobService.class));
-        Thread.setDefaultUncaughtExceptionHandler(new MyHandler());
+//        Thread.setDefaultUncaughtExceptionHandler(new MyHandler());
     }
 
     @Override
@@ -34,7 +30,7 @@ public class MyApplication extends Application {
         super.onTrimMemory(level);
         Log.e(TAG, "22行...onTrimMemory: level = " + level);
 //        startService(new Intent(this,StickyLocaService.class));
-        startService(new Intent(this, MyJobService.class));
+//        startService(new Intent(this, MyJobService.class));
     }
 
     @Override

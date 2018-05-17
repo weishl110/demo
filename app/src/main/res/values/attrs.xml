@@ -13,11 +13,59 @@
     </declare-styleable>
 
     <!-- 下拉刷新头部的位置 -->
-    <declare-styleable name="refreshView" >
+    <declare-styleable name="refreshView">
         <attr name="refresh_gravity" format="enum">
             <enum name="refresh_top" value="1" />
             <enum name="refresh_center" value="2" />
             <enum name="refresh_bottom" value="3" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="AutoTabLayout">
+        <!-- 图片 -->
+        <attr name="tl_isShowImage" format="boolean" />
+        <attr name="tl_imageRes" format="reference" />
+        <attr name="tl_imageWidth" format="dimension" />
+        <attr name="tl_imageHeight" format="dimension" />
+        <attr name="tl_imageGravity" format="enum">
+            <enum name="tl_top" value="0x11" />
+            <enum name="tl_left" value="0x12" />
+            <enum name="tl_right" value="0x13" />
+            <enum name="tl_bottom" value="0x14" />
+        </attr>
+        <!-- 文字 -->
+        <attr name="tl_textSize" format="dimension" />
+        <attr name="tl_textColor" format="color|reference" />
+        <!-- 数量 -->
+        <attr name="tl_textNum" format="integer" />
+        <attr name="tl_numSize" format="integer" />
+        <attr name="tl_isShowNum" format="boolean" />
+        <attr name="tl_tabBg" format="reference|color" />
+
+        <!-- 图片与文字的间距 如果没有图片可以不设置-->
+        <attr name="tl_textImageMargin" format="dimension" />
+        <!-- tab之间的横间距 -->
+        <attr name="tl_horizontalSpec" format="dimension" />
+        <attr name="tl_paddingLeft" format="dimension" />
+        <attr name="tl_paddingTop" format="dimension" />
+        <attr name="tl_paddingRight" format="dimension" />
+        <attr name="tl_paddingBottom" format="dimension" />
+
+        <attr name="tl_background" format="reference|color" />
+
+        <!-- indicator -->
+        <attr name="tl_isShowIndicator" format="boolean" />
+        <attr name="tl_indicatorHeight" format="dimension" />
+        <attr name="tl_indicatorColor" format="color" />
+        <attr name="tl_indicatorStyle" format="enum">
+            <enum name="round" value="11" />
+            <enum name="normal" value="12" />
+        </attr>
+        <attr name="tl_indicatorRadius" format="dimension" />
+        <attr name="tl_indicatorGravity" format="enum">
+            <enum name="top" value="0x21" />
+            <enum name="bottom" value="0x22" />
+        </attr>
+        <attr name="tl_indicatorMargin" format="dimension" />
     </declare-styleable>
 </resources>
